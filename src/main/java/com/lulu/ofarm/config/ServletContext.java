@@ -106,6 +106,7 @@ public class ServletContext extends WebMvcConfigurationSupport {
 		registry.addResourceHandler("/doc/**").addResourceLocations("/doc/");
 		registry.addResourceHandler("/cache/**").addResourceLocations("/cache/");
 		registry.addResourceHandler("/template/**").addResourceLocations("/template/");*/
+		registry.addResourceHandler("/admin/**").addResourceLocations("/admin/");
 		registry.addResourceHandler("/admin/assets/**").addResourceLocations("/admin/assets/");
 		registry.addResourceHandler("/admin/css/**").addResourceLocations("/admin/css/");
 		registry.addResourceHandler("/admin/fonts/**").addResourceLocations("/admin/fonts/");

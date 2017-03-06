@@ -57,6 +57,12 @@ public class SysAdminController {
 		outPrintResult(response, msg);
 	}
 	
+	@RequestMapping("/findAdminByLoginname")
+	public @ResponseBody SysAdmin findAdminByLoginname(String loginname){
+		SysAdmin result = sysAdminService.findByLoginname(loginname);
+		return result;
+	}
+	
 	private void outPrintResult(HttpServletResponse response,String returnStr) {
 		try {
 			response.setContentType("text/plain; charset=utf-8");

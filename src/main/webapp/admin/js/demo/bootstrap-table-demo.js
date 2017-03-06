@@ -199,7 +199,7 @@ function buildTable($el, cells, rows) {
       //queryParams: queryParams//前端调用服务时，会默认传递上边提到的参数，如果需要添加自定义参数，可以自定义一个函数返回请求参数
     });
 
-    var $result = $('#examplebtTableEventsResult');
+    /*var $result = $('#examplebtTableEventsResult');
     var check = $("checkbox");
 
     $('#exampleTableEvents').on('all.bs.table', function(e, name, args) {
@@ -220,14 +220,14 @@ function buildTable($el, cells, rows) {
       .on('uncheck.bs.table', function(e, row) {
         $result.text('Event: uncheck.bs.table');
       })
-     /* .on('check-all.bs.table', function(e) {
+      .on('check-all.bs.table', function(e) {
         $result.text('Event: check-all.bs.table');
         var check = $("checkbox");
         console.info(check);
-      })*/
-      /*.on('uncheck-all.bs.table', function(e) {
+      })
+      .on('uncheck-all.bs.table', function(e) {
         $result.text('Event: uncheck-all.bs.table');
-      })*/
+      })
       .on('load-success.bs.table', function(e, data) {
         $result.text('Event: load-success.bs.table');
       })
@@ -242,6 +242,6 @@ function buildTable($el, cells, rows) {
       })
       .on('search.bs.table', function(e, text) {
         $result.text('Event: search.bs.table');
-      });
+      });*/
   })();
 })(document, window, jQuery);

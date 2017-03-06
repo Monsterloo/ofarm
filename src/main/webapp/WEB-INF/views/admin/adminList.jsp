@@ -36,7 +36,7 @@
 							<button type="button" class="btn btn-outline btn-default" data-toggle="modal" data-target="#myModal" data-keyboard="true">
                                         <i class="glyphicon glyphicon-plus" aria-hidden="true"></i>
                                     </button>
-							<button type="button" class="btn btn-outline btn-default">
+							<button type="button" class="btn btn-outline btn-default" id="editbtn">
                                         <i class="glyphicon glyphicon-pencil" aria-hidden="true"></i>
                                     </button>
 							<button type="button" class="btn btn-outline btn-default">
@@ -77,6 +77,7 @@
                     </div>
                     <div class="modal-body">
                         <form id="infoform" action="${ctx }/sysAdmin/insertAdmin">
+                        	<input type="hidden" id="id" />
                         	<div class="form-group"><label>用户名</label> 
                         		 <input type="text" id="loginname" name="loginname" placeholder="请输入新的帐号" class="form-control"></div>
                         	<div class="form-group"><label>密码</label> 
@@ -130,6 +131,7 @@
 				});
 			});*/
 			$(function(){
+				$("#adminid").hide();
 				$("#infoform").bootstrapValidator({
 					feedbackIcons: {
 		                valid: 'glyphicon glyphicon-ok',
@@ -209,6 +211,7 @@
 		            
 				});
 				
+				//提交表单
 				$("#infoform").submit(function(ev){ev.preventDefault();});
 				$(".btn-primary").on("click", function(){
 					//获取表单对象
@@ -253,25 +256,21 @@
 					}
 				});
 				
-				$(".glyphicon-pencil").click(function(){
-					
-				});
-				
+				//取消按钮
 				$('.btn-white').click(function() {
 					$('#infoform').data('bootstrapValidator').resetForm(true);
-					/*$("#model").removeClass("rotateInDownLeft");
-					$("#model").addClass("rotateOutUpRight");
-					$("#model").attr("data-animation","rotateOutUpRight");
-					$(document.body).removeClass("modal-open");
-					$("#myModal").removeClass("in");
-					$("#myModal").attr("style","display: none;");
-					$(".modal-backdrop").remove();*/
 			     });
 				
 				
-				 $('#exampleTableEvents').on('all.bs.table', function(e, name, args) {
-		     	   console.log('Event:', name, ', data:', args);
-		     	 })
+				//表格事件
+				var selectcount = $(".selected").length;
+				$('#exampleTableEvents').on('all.bs.table', function(e, name, args) {
+					console.log('Event:', name, ', data:', args);
+				}).on('check.bs.table', function(e, row) {
+			        selectcount = $(".selected").length;
+			   	}).on('uncheck.bs.table', function(e, row) {
+			        selectcount = $(".selected").length;
+			    })
 				 //全选
 				 .on('check-all.bs.table', function(e) {
 					//$result.text('Event: check-all.bs.table');
@@ -286,6 +285,59 @@
 					var selects = $("td[class=bs-checkbox]").parent();
 					$(selects).removeClass("selected");
 				 });
+				
+				
+				//修改信息
+				$("#editbtn").bind("click",function(){
+					if(selectcount > 1){
+						alert("请选择一条管理员项!");
+						return;
+					}else if(selectcount == 0){
+						alert("请选择管理员项!");
+						return;
+					}else{
+						alert("进入修改");
+						$("#myModal").modal("show");
+						var loginname = $(".selected").children("td")[1].innerHTML;
+						$.ajax({
+							type:"POST",
+							url:'${ctx}/sysAdmin/findAdminByLoginname',
+							async:true,
+							dataType:'json',
+							data: {
+								'loginname':loginname
+							},
+							success:function(data){
+								$("#id").val(data.id);
+								$("#loginname").val(data.loginname);
+								$("#password").val(data.password);
+								$("#phone").val(data.phone);
+								$("#email").val(data.email);
+								$("#createtime").val(data.createtime);
+								$("#roletype").val(data.roletype);
+								$("#state").val(data.state);
+								$.ajax({
+									type:"POST",
+									url:'${ctx}/sysAdmin/findAdminByLoginname',
+									async:true,
+									dataType:'json',
+									data: {
+										'loginname':loginname
+									},
+									success:function(data){
+										
+									}
+								});
+							},
+							error:function(){
+								alert("获取数据错误!");
+							}
+						});
+						//$("#infoform").submit();
+					}
+				});
+			
+			//function()
 			});
 			
 		</script>
