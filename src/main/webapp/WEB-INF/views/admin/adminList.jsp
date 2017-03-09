@@ -33,7 +33,7 @@
 							事件结果
 						</div>
 						<div class="btn-group hidden-xs" id="exampleTableEventsToolbar" role="group">
-							<button type="button" class="btn btn-outline btn-default" data-toggle="modal" data-target="#myModal" data-keyboard="true">
+							<button type="button" class="btn btn-outline btn-default" id="insertbtn" data-keyboard="true">
                                         <i class="glyphicon glyphicon-plus" aria-hidden="true"></i>
                                     </button>
 							<button type="button" class="btn btn-outline btn-default" id="editbtn">
@@ -82,12 +82,15 @@
                         		 <input type="text" id="loginname" name="loginname" placeholder="请输入新的帐号" class="form-control"></div>
                         	<div class="form-group"><label>密码</label> 
                         		 <input type="password" id="password" name="password" placeholder="请输入您的密码" class="form-control"></div>
-                        	<div class="form-group"><label>确定密码</label> 
+                        	<div class="form-group"><label>确定密码</label	> 
                         		 <input type="password" name="surepass" placeholder="请再次输入您的密码" class="form-control"></div>
                         	<div class="form-group"><label>手机号码</label> 
                         		 <input type="text" id="phone" name="phone" placeholder="请输入您的手机号码" class="form-control"></div>
                         	<div class="form-group"><label>Email</label> 
                         		 <input type="email" id="email" name="email" placeholder="请输入您的Email" class="form-control"></div>
+                        	<input type="hidden" id="createtime" />
+                        	<input type="hidden" id="roletype" />
+                        	<input type="hidden" id="state" />
                         </form>
                     </div>
                     <div class="modal-footer">
@@ -221,20 +224,28 @@
 					bootstrapValidator.validate();
 					if(bootstrapValidator.isValid()){
 					//表单提交的方法、比如ajax提交
+						var id = $("#id").val(); 
 						var loginname = $("#loginname").val();
 						var password = $("#password").val();
 						var phone = $("#phone").val();
 						var email = $("#email").val();
+						var createtime = $("#createtime").val();
+						var roletype = $("#roletype").val();
+						var state = $("#state").val();
 						$.ajax({
 							type:"POST",
 							url:'../sysAdmin/insertAdmin',
 							async:true,
 							dataType:'text',
 							data: {
+								'id':id,
 								'loginname':loginname,
 								'password':password,
 								'phone':phone,
-								'email':email
+								'email':email,
+								'createtime':createtime,
+								'roletype':roletype,
+								'state':state
 							},
 							success:function(data){
 								if(data == null || data == ""){
@@ -259,6 +270,10 @@
 				//取消按钮
 				$('.btn-white').click(function() {
 					$('#infoform').data('bootstrapValidator').resetForm(true);
+					$("#id").val();
+					$("#createtime").val();
+					$("#roletype").val();
+					$("#state").val();
 			     });
 				
 				
@@ -286,6 +301,16 @@
 					$(selects).removeClass("selected");
 				 });
 				
+				//添加信息
+				$("#insertbtn").bind("click",function(){
+					$("#myModal").modal("show");
+					$('#infoform').data('bootstrapValidator').resetForm(true);
+					$("#id").val();
+					$("#createtime").val();
+					$("#roletype").val();
+					$("#state").val();
+					$(".modal-title").innerhtml = "添加管理员信息";
+				});
 				
 				//修改信息
 				$("#editbtn").bind("click",function(){
@@ -298,6 +323,7 @@
 					}else{
 						alert("进入修改");
 						$("#myModal").modal("show");
+						$(".modal-title").innerhtml = "修改管理员信息"s;
 						var loginname = $(".selected").children("td")[1].innerHTML;
 						$.ajax({
 							type:"POST",
@@ -316,7 +342,7 @@
 								$("#createtime").val(data.createtime);
 								$("#roletype").val(data.roletype);
 								$("#state").val(data.state);
-								$.ajax({
+								/* $.ajax({
 									type:"POST",
 									url:'${ctx}/sysAdmin/findAdminByLoginname',
 									async:true,
@@ -327,7 +353,7 @@
 									success:function(data){
 										
 									}
-								});
+								}); */
 							},
 							error:function(){
 								alert("获取数据错误!");
