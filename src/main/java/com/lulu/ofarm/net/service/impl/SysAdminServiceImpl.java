@@ -1,8 +1,6 @@
 package com.lulu.ofarm.net.service.impl;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -33,12 +31,24 @@ public class SysAdminServiceImpl implements SysAdminService {
 	@Autowired
 	private SysAdminDao sysAdminDao;
 	
-	public void save(SysAdmin admin) {
-		Date date = new Date();
-		admin.setCreatetime(DateUtils.DateToString_14a(date));
-		admin.setRoletype("2");
-		admin.setState("1");
-		sysAdminDao.save(admin);	
+	public SysAdmin save(SysAdmin admin) {
+		if(admin.getCreatetime() == null || "".equals(admin.getCreatetime())){
+			Date date = new Date();
+			admin.setCreatetime(DateUtils.DateToString_14a(date));
+		}
+		if(admin.getRoletype() != null || !"".equals(admin.getRoletype())){
+			if("超级管理员".equals(admin.getRoletype())){
+				admin.setRoletype("1");
+			}else{
+				admin.setRoletype("2");
+			}
+		}else{
+			admin.setRoletype("2");
+		}
+		if(admin.getState() == null || "".equals(admin.getState())){
+			admin.setState("1");
+		}
+		return sysAdminDao.save(admin);	
 	}
 
 	public SysAdmin findByLoginname(String loginname) {
@@ -63,6 +73,13 @@ public class SysAdminServiceImpl implements SysAdminService {
 			}
 		}; 
 		Page<SysAdmin> pageObj = sysAdminDao.findAll(spec,page);
+		for(SysAdmin admin : pageObj){
+			if("1".equals(admin.getRoletype())){
+				admin.setRoletype("超级管理员");
+			}else{
+				admin.setRoletype("普通管理员");
+			}
+		}
 		return pageObj;
 	}
 }

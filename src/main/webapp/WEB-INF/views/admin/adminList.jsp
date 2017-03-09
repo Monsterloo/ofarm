@@ -232,9 +232,17 @@
 						var createtime = $("#createtime").val();
 						var roletype = $("#roletype").val();
 						var state = $("#state").val();
+						var url = "";
+						var index = 0;
+						if($(".modal-title").html()=="修改管理员信息"){
+							index = 1;
+							url = "../sysAdmin/updateAdmin";
+						}else{
+							url = "../sysAdmin/insertAdmin";
+						}
 						$.ajax({
 							type:"POST",
-							url:'../sysAdmin/insertAdmin',
+							url:url,
 							async:true,
 							dataType:'text',
 							data: {
@@ -248,12 +256,20 @@
 								'state':state
 							},
 							success:function(data){
+								console.info(data);
 								if(data == null || data == ""){
-									alert("已存在用户名");
-								}
-								if(data == "Successful"){
+									if(index == 1){
+										alert("修改失败!");
+									}else{
+										alert("已存在用户名!");
+									}
+								}else if(data == "Successful"){
 									$(".btn-white").click();
-									alert("添加成功!");
+									if(index == 1){
+										alert("修改成功!");
+									}else{
+										alert("添加成功!");
+									}
 									window.location.reload();
 								}
 							},
@@ -305,11 +321,12 @@
 				$("#insertbtn").bind("click",function(){
 					$("#myModal").modal("show");
 					$('#infoform').data('bootstrapValidator').resetForm(true);
+					$("#loginname").removeAttr("readOnly");
 					$("#id").val();
 					$("#createtime").val();
 					$("#roletype").val();
 					$("#state").val();
-					$(".modal-title").innerhtml = "添加管理员信息";
+					$(".modal-title").html("添加管理员信息");
 				});
 				
 				//修改信息
@@ -321,9 +338,9 @@
 						alert("请选择管理员项!");
 						return;
 					}else{
-						alert("进入修改");
 						$("#myModal").modal("show");
-						$(".modal-title").innerhtml = "修改管理员信息"s;
+						$("#loginname").attr("readOnly",true);
+						$(".modal-title").html("修改管理员信息");
 						var loginname = $(".selected").children("td")[1].innerHTML;
 						$.ajax({
 							type:"POST",

@@ -1,7 +1,5 @@
 package com.lulu.ofarm.net.controller;
 
-import java.util.List;
-
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,11 +55,24 @@ public class SysAdminController {
 		outPrintResult(response, msg);
 	}
 	
+	@RequestMapping("/updateAdmin")
+	public void updateAdmin(SysAdmin sysAdmin,HttpServletResponse response){
+		String msg = "";
+		SysAdmin result = sysAdminService.save(sysAdmin);
+		if(result != null){
+			msg = "Successful";
+		}else{
+			msg = "";
+		}
+		outPrintResult(response, msg);
+	}
+	
 	@RequestMapping("/findAdminByLoginname")
 	public @ResponseBody SysAdmin findAdminByLoginname(String loginname){
 		SysAdmin result = sysAdminService.findByLoginname(loginname);
 		return result;
 	}
+	
 	
 	private void outPrintResult(HttpServletResponse response,String returnStr) {
 		try {
