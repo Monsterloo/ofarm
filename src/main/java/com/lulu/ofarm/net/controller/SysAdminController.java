@@ -39,6 +39,13 @@ public class SysAdminController {
 		
 		bean.setTotal(pageObj.getTotalElements());
 		bean.setRows(pageObj.getContent());
+		for(SysAdmin admin : bean.getRows()){
+			if("1".equals(admin.getRoletype())){
+				admin.setRoletype("超级管理员");
+			}else if("2".equals(admin.getRoletype())){
+				admin.setRoletype("普通管理员");
+			}
+		}
 		return bean;
 	}
 	

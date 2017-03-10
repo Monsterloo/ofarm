@@ -29,9 +29,6 @@
 				<!-- Example Events -->
 				<div class="example-wrap">
 					<div class="example">
-						<div class="alert alert-success" id="examplebtTableEventsResult" role="alert">
-							事件结果
-						</div>
 						<div class="btn-group hidden-xs" id="exampleTableEventsToolbar" role="group">
 							<button type="button" class="btn btn-outline btn-default" id="insertbtn" data-keyboard="true">
                                         <i class="glyphicon glyphicon-plus" aria-hidden="true"></i>

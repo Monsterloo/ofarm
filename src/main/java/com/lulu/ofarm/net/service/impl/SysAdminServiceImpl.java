@@ -36,13 +36,16 @@ public class SysAdminServiceImpl implements SysAdminService {
 			Date date = new Date();
 			admin.setCreatetime(DateUtils.DateToString_14a(date));
 		}
-		if(admin.getRoletype() != null || !"".equals(admin.getRoletype())){
+		/*if(admin.getRoletype() != null || !"".equals(admin.getRoletype())){
 			if("超级管理员".equals(admin.getRoletype())){
 				admin.setRoletype("1");
 			}else{
 				admin.setRoletype("2");
 			}
 		}else{
+			admin.setRoletype("2");
+		}*/
+		if(admin.getRoletype() == null || "".equals(admin.getRoletype())){
 			admin.setRoletype("2");
 		}
 		if(admin.getState() == null || "".equals(admin.getState())){
@@ -73,13 +76,6 @@ public class SysAdminServiceImpl implements SysAdminService {
 			}
 		}; 
 		Page<SysAdmin> pageObj = sysAdminDao.findAll(spec,page);
-		for(SysAdmin admin : pageObj){
-			if("1".equals(admin.getRoletype())){
-				admin.setRoletype("超级管理员");
-			}else{
-				admin.setRoletype("普通管理员");
-			}
-		}
 		return pageObj;
 	}
 }

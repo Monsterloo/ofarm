@@ -117,7 +117,7 @@
 			<div id="page-wrapper" class="gray-bg dashbard-1">
 				<div class="row border-bottom">
 					<nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
-						<div class="navbar-header" style="width: 95%;">
+						<div class="navbar-header" style="width: 94%;">
 							<a class="navbar-minimalize minimalize-styl-2 btn btn-info " href="#"><i class="fa fa-bars"></i> </a>
 							<!--搜索栏-->
 							<!--<form role="search" class="navbar-form-custom" method="post" action="search_results.html">
