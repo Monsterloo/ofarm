@@ -69,7 +69,7 @@
 							<a href="#"><i class="fa fa-envelope"></i> <span class="nav-label">商品列表</span><span class="label label-warning pull-right">16</span></a>
 						</li>
 						<li>
-							<a href="#"><i class="fa fa-desktop"></i> <span class="nav-label">商品分类管理</span>
+							<a class="J_menuItem" href="${ctx }/category/main"><i class="fa fa-desktop"></i> <span class="nav-label">商品分类管理</span>
 								<!--<span class="fa arrow"></span>--></a>
 						</li>
 
@@ -158,7 +158,7 @@
 					</nav>
 				</div>
 				<div class="row J_mainContent" id="content-main">
-					<iframe id="J_iframe" width="100%" height="100%" src="${ctx }/sysAdmin/main" frameborder="0" data-id="index_v1.html" seamless></iframe>
+					<iframe id="J_iframe" width="100%" height="100%" src="${ctx }/category/main" frameborder="0" data-id="index_v1.html" seamless></iframe>
 				</div>
 			</div>
 			<!--右侧部分结束-->
