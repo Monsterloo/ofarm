@@ -1,0 +1,14 @@
+package com.lulu.ofarm.net.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+@Controller
+@RequestMapping("/category")
+public class CategoryController {
+
+	@RequestMapping("/main")
+	public String type(){
+		return "admin/categoryTree";
+	}
+}
