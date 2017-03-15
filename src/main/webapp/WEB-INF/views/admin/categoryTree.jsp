@@ -105,8 +105,8 @@
 				}
 			};
 
-			var zNodes = [
-				{ id: 1, pId: 0, name: "pNode 1", open: true },
+			/*var zNodes = [
+				 { id: 1, pId: 0, name: "pNode 1", open: true },
 				{ id: 11, pId: 1, name: "pNode 11" },
 				{ id: 111, pId: 11, name: "leaf node 111" },
 				{ id: 112, pId: 11, name: "leaf node 112" },
@@ -136,7 +136,7 @@
 				{ id: 234, pId: 23, name: "leaf node 234" },
 				{ id: 3, pId: 0, name: "pNode 3 - no child", isParent: true },
 				{ id: uuid(32,16), pId: 0, name: "pNode 3 - no child", isParent: true }
-			];
+			]; */
 
 			var log, className = "dark";
 
@@ -237,6 +237,17 @@
 			}*/
 
 			$(document).ready(function() {
+				debugger;
+				var zNodes = null;
+				$.ajax({
+			    	url:'${ctx}/category/getAllCategory',
+			        type: 'POST',
+			        dataType: 'json',
+			        success: function (json) {
+			        	//console.info(JSON.stringify(json));
+			        	zNodes = json;
+			        }
+				});
 				$.fn.zTree.init($("#treeDemo"), setting, zNodes);
 			});
 

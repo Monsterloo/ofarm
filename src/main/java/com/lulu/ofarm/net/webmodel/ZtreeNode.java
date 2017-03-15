@@ -1,13 +1,13 @@
 package com.lulu.ofarm.net.webmodel;
 
-public class ZtreeNodes {
+public class ZtreeNode {
 	private String id;
 	
 	private String pId;
 	
 	private String name;
 	
-	private boolean isParent;
+	private String isParent;
 
 	public String getId() {
 		return id;
@@ -33,13 +33,12 @@ public class ZtreeNodes {
 		this.name = name;
 	}
 
-	public boolean isParent() {
+	public String getIsParent() {
 		return isParent;
 	}
 
-	public void setParent(boolean isParent) {
+	public void setIsParent(String isParent) {
 		this.isParent = isParent;
 	}
-	
 	
 }

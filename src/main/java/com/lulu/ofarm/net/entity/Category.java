@@ -29,6 +29,8 @@ public class Category implements Serializable {
 	
 	private String state;
 
+	private String isParent;
+	
 	public Category() {
 	}
 
@@ -70,6 +72,14 @@ public class Category implements Serializable {
 
 	public void setState(String state) {
 		this.state = state;
+	}
+
+	public String getIsParent() {
+		return isParent;
+	}
+
+	public void setIsParent(String isParent) {
+		this.isParent = isParent;
 	}
 	
 

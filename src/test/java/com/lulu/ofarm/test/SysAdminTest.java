@@ -13,10 +13,13 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.lulu.ofarm.net.dao.SysAdminDao;
 import com.lulu.ofarm.net.dao.SysRoleDao;
+import com.lulu.ofarm.net.entity.Category;
 import com.lulu.ofarm.net.entity.SysAdmin;
 import com.lulu.ofarm.net.entity.SysRole;
+import com.lulu.ofarm.net.service.CategoryService;
 import com.lulu.ofarm.net.service.SysAdminService;
 import com.lulu.ofarm.net.util.DateUtils;
+import com.lulu.ofarm.net.webmodel.ZtreeNode;
 
 import jxl.Sheet;
 import jxl.Workbook;
@@ -40,6 +43,32 @@ public class SysAdminTest {
 	
 	@Autowired
 	SysRoleDao sysRoleDao;
+	
+	@Autowired
+	CategoryService categoryService;
+	
+	@Test
+	public void TestCategoryService(){
+		/*List<Category> allCategory = categoryService.getAllCategory();
+		for(Category c : allCategory){
+			System.out.println(c.toString());
+		}*/
+		/*Category c = new Category();
+		c.setId("asdffdf");
+		c.setCid(c.getId());
+		c.setCname("test");
+		c.setIsParent("true");
+		c.setParentid("0");
+		c.setState("1");*/
+		ZtreeNode node = new ZtreeNode();
+		node.setId("saaas");
+		node.setIsParent("true");
+		node.setName("test");
+		node.setpId("0");
+		List<ZtreeNode> list = new ArrayList<ZtreeNode>();
+		list.add(node);
+		categoryService.save(list);
+	}
 	
 	@Test
 	public void saveAdmin(){
