@@ -83,16 +83,29 @@
 					removeHoverDom: removeHoverDom,
 					selectedMulti: false
 				},
+				async: {
+					enable: true,
+					url:"${ctx}/category/getAllCategory",
+					autoParam:["id", "name", "pId","isParent"],
+					/* otherParam:{"otherParam":"zTreeAsyncTest" }, */
+					dataFilter: filter,
+					type: "get"
+				},
 				edit: {
 					enable: true,
-					editNameSelectAll: true
-					/*,
-									showRemoveBtn: showRemoveBtn,
-									showRenameBtn: showRenameBtn*/
+					editNameSelectAll: true,
+					showRemoveBtn: showRemoveBtn,
+					showRenameBtn: showRenameBtn,
+					drag: {
+						autoExpandTrigger: true,
+						prev: dropPrev,
+						inner: dropInner,
+						next: dropNext
+					}
 				},
 				data: {
 					simpleData: {
-						enable: true
+						enable: true	//简单json数据
 					}
 				},
 				callback: {
@@ -101,12 +114,25 @@
 					beforeRemove: beforeRemove,
 					beforeRename: beforeRename,
 					onRemove: onRemove,
-					onRename: onRename
+					onRename: onRename,
+					onAsyncSuccess: expendFirstNodes,	//异步加载后回调事件
+					beforeDrag: beforeDrag,
+					beforeDrop: beforeDrop,
+					onDrag: onDrag,
+					onDrop: onDrop
 				}
 			};
+			
+			function filter(treeId, parentNode, childNodes) {
+				if (!childNodes) return null;
+				for (var i=0, l=childNodes.length; i<l; i++) {
+					childNodes[i].name = childNodes[i].name.replace(/\.n/g, '.');
+				}
+				return childNodes;
+			}
 
-			/*var zNodes = [
-				 { id: 1, pId: 0, name: "pNode 1", open: true },
+			var zNodes = [
+				/* { id: 1, pId: 0, name: "pNode 1", open: true },
 				{ id: 11, pId: 1, name: "pNode 11" },
 				{ id: 111, pId: 11, name: "leaf node 111" },
 				{ id: 112, pId: 11, name: "leaf node 112" },
@@ -135,28 +161,109 @@
 				{ id: 233, pId: 23, name: "leaf node 233" },
 				{ id: 234, pId: 23, name: "leaf node 234" },
 				{ id: 3, pId: 0, name: "pNode 3 - no child", isParent: true },
-				{ id: uuid(32,16), pId: 0, name: "pNode 3 - no child", isParent: true }
-			]; */
-
-			var log, className = "dark";
-
-			function beforeDrag(treeId, treeNodes) {
-				return false;
-			}
-			/*function beforeEditName(treeId, treeNode) {
-				className = (className === "dark" ? "":"dark");
-				showLog("[ "+getTime()+" beforeEditName ]&nbsp;&nbsp;&nbsp;&nbsp; " + treeNode.name);
-				var zTree = $.fn.zTree.getZTreeObj("treeDemo");
-				zTree.selectNode(treeNode);
-				setTimeout(function() {
-					if (confirm("Start node '" + treeNode.name + "' editorial status?")) {
-						setTimeout(function() {
-							zTree.editName(treeNode);
-						}, 0);
+				{ id: uuid(32,16), pId: 0, name: "pNode 3 - no child", isParent: true } */
+			];
+			
+			//上拖拽
+			function dropPrev(treeId, nodes, targetNode) {
+				var pNode = targetNode.getParentNode();
+				if (pNode && pNode.dropInner === false) {
+					return false;
+				} else {
+					for (var i=0,l=curDragNodes.length; i<l; i++) {
+						var curPNode = curDragNodes[i].getParentNode();
+						if (curPNode && curPNode !== targetNode.getParentNode() && curPNode.childOuter === false) {
+							return false;
+						}
 					}
-				}, 0);
-				return false;
-			}*/
+				}
+					return true;
+			}
+			//里拖拽
+			function dropInner(treeId, nodes, targetNode) {
+				if (targetNode && targetNode.dropInner === false) {
+					return false;
+				} else {
+					for (var i=0,l=curDragNodes.length; i<l; i++) {
+						if (!targetNode && curDragNodes[i].dropRoot === false) {
+							return false;
+						} else if (curDragNodes[i].parentTId && curDragNodes[i].getParentNode() !== targetNode && curDragNodes[i].getParentNode().childOuter === false) {
+							return false;
+						}
+					}
+				}
+				return true;
+			}
+			//下拖拽
+			function dropNext(treeId, nodes, targetNode) {
+				var pNode = targetNode.getParentNode();
+				if (pNode && pNode.dropInner === false) {
+					return false;
+				} else {
+					for (var i=0,l=curDragNodes.length; i<l; i++) {
+						var curPNode = curDragNodes[i].getParentNode();
+						if (curPNode && curPNode !== targetNode.getParentNode() && curPNode.childOuter === false) {
+							return false;
+						}
+					}
+				}
+				return true;
+			}
+
+			var log, className = "dark",curDragNodes, autoExpandNode;
+			
+			function beforeDrag(treeId, treeNodes) {
+				controller = true;
+				className = (className === "dark" ? "":"dark");
+				for (var i=0,l=treeNodes.length; i<l; i++) {
+					if (treeNodes[i].drag === false) {
+						curDragNodes = null;
+						controller = false;
+						return false;
+					} else if (treeNodes[i].parentTId && treeNodes[i].getParentNode().childDrag === false) {
+						curDragNodes = null;
+						controller = false;
+						return false;
+					}
+				}
+				curDragNodes = treeNodes;
+				return true;
+			}	
+			
+			function beforeDrop(treeId, treeNodes, targetNode, moveType, isCopy) {
+				className = (className === "dark" ? "":"dark");
+				if(treeNodes[0].pId == 0 || treeNodes[0].pId == null){
+					alert("不能改变根类别结构!");
+					return false;
+				}else {
+					if(targetNode == null){
+						alert("不能增加根类别!");
+						return false;
+					}else{
+						if(targetNode.pId == 0 || targetNode.pId == null && (moveType == "prev" || moveType == "next")){
+							alert("不能增加根类别!");
+							return false;
+						}
+					}
+				}
+				return true;
+			}
+			function onDrag(event, treeId, treeNodes) {
+				className = (className === "dark" ? "":"dark");
+			}
+			function onDrop(event, treeId, treeNodes, targetNode, moveType, isCopy) {
+				className = (className === "dark" ? "":"dark");
+			}
+			
+			function onRemove(e, treeId, treeNode) {
+				showLog("[ " + getTime() + " onRemove ]&nbsp;&nbsp;&nbsp;&nbsp; " + treeNode.name);
+			}
+			
+			function onRename(e, treeId, treeNode, isCancel) {
+				showLog((isCancel ? "<span style='color:red'>" : "") + "[ " + getTime() + " onRename ]&nbsp;&nbsp;&nbsp;&nbsp; " + treeNode.name + (isCancel ? "</span>" : ""));
+			}
+			
+			//验证删除
 			function beforeRemove(treeId, treeNode) {
 				className = (className === "dark" ? "" : "dark");
 				showLog("[ " + getTime() + " beforeRemove ]&nbsp;&nbsp;&nbsp;&nbsp; " + treeNode.name);
@@ -165,10 +272,7 @@
 				return confirm("确定删除 '" + treeNode.name + "' 类别及其子类别吗?");
 			}
 
-			function onRemove(e, treeId, treeNode) {
-				showLog("[ " + getTime() + " onRemove ]&nbsp;&nbsp;&nbsp;&nbsp; " + treeNode.name);
-			}
-
+			//验证编辑
 			function beforeRename(treeId, treeNode, newName, isCancel) {
 				className = (className === "dark" ? "" : "dark");
 				showLog((isCancel ? "<span style='color:red'>" : "") + "[ " + getTime() + " beforeRename ]&nbsp;&nbsp;&nbsp;&nbsp; " + treeNode.name + (isCancel ? "</span>" : ""));
@@ -183,16 +287,22 @@
 				return true;
 			}
 
-			function onRename(e, treeId, treeNode, isCancel) {
-				showLog((isCancel ? "<span style='color:red'>" : "") + "[ " + getTime() + " onRename ]&nbsp;&nbsp;&nbsp;&nbsp; " + treeNode.name + (isCancel ? "</span>" : ""));
-			}
-
+			//展示删除按钮
 			function showRemoveBtn(treeId, treeNode) {
-				return !treeNode.isFirstNode;
+				if(treeNode.pId==0 || treeNode.pId == null){
+					return false;
+				}else{
+					return true;
+				}
 			}
 
+			//展示编辑按钮
 			function showRenameBtn(treeId, treeNode) {
-				return !treeNode.isLastNode;
+				if(treeNode.pId==0 || treeNode.pId == null){
+					return false;
+				}else{
+					return true;
+				}
 			}
 
 			function showLog(str) {
@@ -214,6 +324,7 @@
 
 			var newCount = 1;
 
+			//添加节点
 			function addHoverDom(treeId, treeNode) {
 				var sObj = $("#" + treeNode.tId + "_span");
 				if(treeNode.editNameFlag || $("#addBtn_" + treeNode.tId).length > 0) return;
@@ -228,38 +339,49 @@
 				});
 			};
 
+			//删除节点
 			function removeHoverDom(treeId, treeNode) {
 				$("#addBtn_" + treeNode.tId).unbind().remove();
 			};
-			/*function selectAll() {
-				var zTree = $.fn.zTree.getZTreeObj("treeDemo");
-				zTree.setting.edit.editNameSelectAll =  $("#selectAll").attr("checked");
-			}*/
 
+			//展示所有一级类别
+			function expendFirstNodes(){
+				var treeObj = $.fn.zTree.getZTreeObj("treeDemo");
+				var nodes = treeObj.getNodes();
+				if (nodes.length>0) {
+				    for(var i=0;i<nodes.length;i++){
+				    	treeObj.expandNode(nodes[i], true, false, false);
+				    }
+				}
+			}
+			
+			/**
+			*初始化
+			*/
 			$(document).ready(function() {
-				debugger;
-				var zNodes = null;
-				$.ajax({
-			    	url:'${ctx}/category/getAllCategory',
-			        type: 'POST',
-			        dataType: 'json',
-			        success: function (json) {
-			        	//console.info(JSON.stringify(json));
-			        	zNodes = json;
-			        }
-				});
-				$.fn.zTree.init($("#treeDemo"), setting, zNodes);
+				/* 				$.ajax({
+		    	url:'${ctx}/category/getAllCategory',
+		        type: 'POST',
+		        dataType: 'json',
+		        success: function (json) {
+		        	//console.info(JSON.stringify(json));
+		        	zNodes = json;
+		        }
+			}); */
+				$.fn.zTree.init($("#treeDemo"), setting);
 			});
 
+			//保存
 			$("#save").click(function() {
 				var treeObj = $.fn.zTree.getZTreeObj("treeDemo");
 				var node = treeObj.getNodes();
 				var nodes = treeObj.transformToArray(node);
 				for(var i = 0; i < nodes.length; i++) {
-					console.info(nodes[i].id + "  " + nodes[i].pId + "  " + nodes[i].name);
+					console.info(nodes[i].id + "  " + nodes[i].pId + "  " + nodes[i].name+"  "+nodes[i].isParent);
 				}
 			});
 
+			//uuid			
 			function uuid(len, radix) {
 				var chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('');
 				var uuid = [],
