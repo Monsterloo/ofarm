@@ -101,7 +101,11 @@
 						prev: dropPrev,
 						inner: dropInner,
 						next: dropNext
-					}
+					},
+					editNameSelectAll: true
+					/*,
+					showRemoveBtn: showRemoveBtn,
+					showRenameBtn: showRenameBtn*/
 				},
 				data: {
 					simpleData: {
@@ -359,6 +363,7 @@
 			*初始化
 			*/
 			$(document).ready(function() {
+
 				/* 				$.ajax({
 		    	url:'${ctx}/category/getAllCategory',
 		        type: 'POST',
@@ -369,6 +374,17 @@
 		        }
 			}); */
 				$.fn.zTree.init($("#treeDemo"), setting);
+				var zNodes = new Array();
+				$.ajax({
+			    	url:'${ctx}/category/getAllCategory',
+			        type: 'get',
+			        dataType: 'json',
+			        success: function (json) {
+			        	//console.info(JSON.stringify(json));
+			        	zNodes = json;
+			        }
+				});
+				$.fn.zTree.init($("#treeDemo"), setting, zNodes);
 			});
 
 			//保存
