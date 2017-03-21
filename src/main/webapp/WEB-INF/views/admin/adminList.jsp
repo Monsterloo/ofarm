@@ -45,7 +45,7 @@
 							<thead>
 								<tr>
 									<th data-field="state" data-checkbox="true"></th>
-									<th data-field="loginname">管理员</th>
+									<th data-field="loginname">人员帐号</th>
 									<th data-field="password">密码</th>
 									<th data-field="phone">手机号码</th>
 									<th data-field="email">邮箱地址</th>
@@ -69,7 +69,7 @@
 						<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">关闭</span>
                         </button>
 						<i class="fa fa-laptop modal-icon"></i>
-						<h4 class="modal-title">添加管理员信息</h4>
+						<h4 class="modal-title">添加员工信息</h4>
 						<!--<small class="font-bold">这里可以显示副标题。-->
                     </div>
                     <div class="modal-body">
@@ -216,7 +216,6 @@
 				$(".btn-primary").on("click", function(){
 					//获取表单对象
 					var bootstrapValidator = $("#infoform").data('bootstrapValidator');
-					console.info(bootstrapValidator);
 					//手动触发验证
 					bootstrapValidator.validate();
 					if(bootstrapValidator.isValid()){
@@ -231,7 +230,7 @@
 						var state = $("#state").val();
 						var url = "";
 						var index = 0;
-						if($(".modal-title").html()=="修改管理员信息"){
+						if($(".modal-title").html()=="修改员工信息"){
 							index = 1;
 							url = "../sysAdmin/updateAdmin";
 						}else{
@@ -323,7 +322,7 @@
 					$("#createtime").val();
 					$("#roletype").val();
 					$("#state").val();
-					$(".modal-title").html("添加管理员信息");
+					$(".modal-title").html("添加员工信息");
 				});
 				
 				//修改信息
@@ -337,7 +336,7 @@
 					}else{
 						$("#myModal").modal("show");
 						$("#loginname").attr("readOnly",true);
-						$(".modal-title").html("修改管理员信息");
+						$(".modal-title").html("修改员工信息");
 						var loginname = $(".selected").children("td")[1].innerHTML;
 						$.ajax({
 							type:"POST",

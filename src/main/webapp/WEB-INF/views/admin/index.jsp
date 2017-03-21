@@ -39,12 +39,12 @@
 									<span class="clear">
                                     <span class="block m-t-xs" style="font-size:16px;">
                                         <i class="fa fa-area-chart"></i>
-                                        <strong class="font-bold">这是一个用户名</strong>
+                                        <strong class="font-bold">admin</strong>
                                     </span>
 									</span>
 								</a>
 							</div>
-							<div class="logo-element">这是一个用户
+							<div class="logo-element">admin
 							</div>
 						</li>
 						<li>
@@ -54,22 +54,26 @@
 							</a>
 						</li>
 						<li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
-							<span class="ng-scope">管理员</span>
+							<span class="ng-scope">人员管理</span>
 						</li>
 						<li>
-							<a class="J_menuItem" href="${ctx }/sysAdmin/main"><i class="fa fa-home"></i><span class="nav-label">管理员列表</span></a>
+							<a class="J_menuItem" href="${ctx }/sysAdmin/main"><i class="fa fa-home"></i><span class="nav-label">员工列表</span></a>
+							</a>
+						</li>
+						<li>
+							<a class="J_menuItem" href="adminList.html"><i class="fa fa-home"></i><span class="nav-label">员工绩效列表</span></a>
 							</a>
 						</li>
 
 						<li class="line dk"></li>
 						<li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
-							<span class="ng-scope">商品</span>
+							<span class="ng-scope">产品</span>
 						</li>
 						<li>
-							<a href="#"><i class="fa fa-envelope"></i> <span class="nav-label">商品列表</span><span class="label label-warning pull-right">16</span></a>
+							<a href="#"><i class="fa fa-envelope"></i> <span class="nav-label">产品列表</span><span class="label label-warning pull-right">16</span></a>
 						</li>
 						<li>
-							<a class="J_menuItem" href="${ctx }/category/main"><i class="fa fa-desktop"></i> <span class="nav-label">商品分类管理</span>
+							<a class="J_menuItem" href="${ctx }/category/main"><i class="fa fa-desktop"></i> <span class="nav-label">产品类别管理</span>
 								<!--<span class="fa arrow"></span>--></a>
 						</li>
 
@@ -95,19 +99,21 @@
 
 						<li class="line dk"></li>
 						<li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
-							<span class="ng-scope">用户</span>
+							<span class="ng-scope">销售</span>
 						</li>
 						<li>
-							<a class="J_menuItem" href="css_animation.html"><i class="fa fa-magic"></i> <span class="nav-label">用户列表</span></a>
+							<a class="J_menuItem" href="css_animation.html"><i class="fa fa-magic"></i> <span class="nav-label">销售图表</span></a>
 						</li>
 
 						<li class="line dk"></li>
 						<li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
-							<span class="ng-scope">销售</span>
+							<span class="ng-scope">企业消息</span>
 						</li>
 						<li>
-							<a class="J_menuItem" href="css_animation.html"><i class="fa fa-magic"></i> <span class="nav-label">销售报表</span></a>
+							<a class="J_menuItem" href="css_animation.html"><i class="fa fa-magic"></i> <span class="nav-label">企业日常消息列表</span></a>
 						</li>
+
+						
 
 					</ul>
 				</div>

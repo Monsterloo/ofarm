@@ -45,11 +45,12 @@ public class SysAdminServiceImpl implements SysAdminService {
 		}else{
 			admin.setRoletype("2");
 		}*/
-		if(admin.getRoletype() == null || "".equals(admin.getRoletype())){
-			admin.setRoletype("2");
-		}
-		if(admin.getState() == null || "".equals(admin.getState())){
-			admin.setState("1");
+		if("管理员".equals(admin.getRoletype())){
+			admin.setRoletype("1");
+		} else if("人事员工".equals(admin.getRoletype())){
+			admin.setState("2");
+		} else if("产品员工".equals(admin.getRoletype())){
+			admin.setState("3");
 		}
 		return sysAdminDao.save(admin);	
 	}

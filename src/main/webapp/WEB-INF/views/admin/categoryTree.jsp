@@ -52,9 +52,6 @@
 						</div>
 
 						<div class="ibox-content">
-							<p class="m-b-lg">
-								<strong>商品分类树</strong>
-							</p>
 
 							<div class="m-t-md">
 								<button class="btn btn-info btn-circle btn-lg" type="button" id="save"><i class="fa fa-check"></i>
@@ -103,9 +100,6 @@
 						next: dropNext
 					},
 					editNameSelectAll: true
-					/*,
-					showRemoveBtn: showRemoveBtn,
-					showRenameBtn: showRenameBtn*/
 				},
 				data: {
 					simpleData: {
@@ -250,6 +244,26 @@
 						}
 					}
 				}
+				curDragNodes = treeNodes;
+				return true;
+			}	
+			
+			function beforeDrop(treeId, treeNodes, targetNode, moveType, isCopy) {
+				className = (className === "dark" ? "":"dark");
+				if(treeNodes[0].pId == 0 || treeNodes[0].pId == null){
+					alert("不能改变根类别结构!");
+					return false;
+				}else {
+					if(targetNode == null){
+						alert("不能增加根类别!");
+						return false;
+					}else{
+						if(targetNode.pId == 0 || targetNode.pId == null && (moveType == "prev" || moveType == "next")){
+							alert("不能增加根类别!");
+							return false;
+						}
+					}
+				}
 				return true;
 			}
 			function onDrag(event, treeId, treeNodes) {
@@ -363,7 +377,6 @@
 			*初始化
 			*/
 			$(document).ready(function() {
-
 				/* 				$.ajax({
 		    	url:'${ctx}/category/getAllCategory',
 		        type: 'POST',
@@ -374,17 +387,6 @@
 		        }
 			}); */
 				$.fn.zTree.init($("#treeDemo"), setting);
-				var zNodes = new Array();
-				$.ajax({
-			    	url:'${ctx}/category/getAllCategory',
-			        type: 'get',
-			        dataType: 'json',
-			        success: function (json) {
-			        	//console.info(JSON.stringify(json));
-			        	zNodes = json;
-			        }
-				});
-				$.fn.zTree.init($("#treeDemo"), setting, zNodes);
 			});
 
 			//保存
