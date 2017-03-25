@@ -36,7 +36,7 @@
 							<button type="button" class="btn btn-outline btn-default" id="editbtn">
                                         <i class="glyphicon glyphicon-pencil" aria-hidden="true"></i>
                                     </button>
-							<button type="button" class="btn btn-outline btn-default">
+							<button type="button" class="btn btn-outline btn-default" id="delbtn">
                                         <i class="glyphicon glyphicon-trash" aria-hidden="true"></i>
                                     </button>
 						</div>
@@ -44,13 +44,13 @@
 						<table id="exampleTableEvents" data-height="500" data-mobile-responsive="true">
 							<thead>
 								<tr>
-									<th data-field="state" data-checkbox="true"></th>
+									<!-- <th data-field="state" data-checkbox="true"></th>
 									<th data-field="loginname">人员帐号</th>
 									<th data-field="password">密码</th>
 									<th data-field="phone">手机号码</th>
 									<th data-field="email">邮箱地址</th>
 									<th data-field="createtime">创建时间</th>
-									<th data-field="roletype">角色</th>
+									<th data-field="roletype">角色</th> -->
 								</tr>
 							</thead>
 						</table>
@@ -291,26 +291,38 @@
 				
 				//表格事件
 				var selectcount = $(".selected").length;
+				var adminIds = new Array();
 				$('#exampleTableEvents').on('all.bs.table', function(e, name, args) {
 					console.log('Event:', name, ', data:', args);
 				}).on('check.bs.table', function(e, row) {
+					adminIds.push(row.id);
+					console.info(adminIds);
 			        selectcount = $(".selected").length;
 			   	}).on('uncheck.bs.table', function(e, row) {
 			        selectcount = $(".selected").length;
+			        adminIds.splice($.inArray(row.id),1);
+			        console.info(adminIds);
 			    })
 				 //全选
-				 .on('check-all.bs.table', function(e) {
+				 .on('check-all.bs.table', function(e,row) {
 					//$result.text('Event: check-all.bs.table');
 					var $result = $('#examplebtTableEventsResult');
 					var selects = $("td[class=bs-checkbox]").parent();
 					$(selects).addClass("selected");
+			        adminIds.splice(0,adminIds.length);
+			        $.each(row,function(i,obj){
+			        	adminIds.push(obj.id);
+			        });
+					console.info(adminIds);
 				 })
 				 //取消全选
-				 .on('uncheck-all.bs.table', function(e) {
+				 .on('uncheck-all.bs.table', function(e,row) {
 					//$result.text('Event: uncheck-all.bs.table');
 					var $result = $('#examplebtTableEventsResult');
 					var selects = $("td[class=bs-checkbox]").parent();
 					$(selects).removeClass("selected");
+					adminIds.splice(0,adminIds.length);		//清除数组
+					console.info(adminIds);
 				 });
 				
 				//添加信息
@@ -323,6 +335,24 @@
 					$("#roletype").val();
 					$("#state").val();
 					$(".modal-title").html("添加员工信息");
+				});
+				
+				//删除消息
+				$("#delbtn").bind("click",function(){
+					if(adminIds.length == 0){
+						alert("请至少选择一条管理员项!");
+						return;
+					}else{
+						$.post('${ctx}/sysAdmin/delAdmin',{
+							'idArr' : adminIds
+						},function(data,status){
+							if(data == "success"){
+								alert("删除成功!");
+							}else{
+								alert("删除失败!");
+							}
+						});
+					} 
 				});
 				
 				//修改信息
@@ -355,24 +385,11 @@
 								$("#createtime").val(data.createtime);
 								$("#roletype").val(data.roletype);
 								$("#state").val(data.state);
-								/* $.ajax({
-									type:"POST",
-									url:'${ctx}/sysAdmin/findAdminByLoginname',
-									async:true,
-									dataType:'json',
-									data: {
-										'loginname':loginname
-									},
-									success:function(data){
-										
-									}
-								}); */
 							},
 							error:function(){
 								alert("获取数据错误!");
 							}
 						});
-						//$("#infoform").submit();
 					}
 				});
 			

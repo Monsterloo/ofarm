@@ -1,6 +1,8 @@
 package com.lulu.ofarm.net.service.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -73,7 +75,15 @@ public class SysAdminServiceImpl implements SysAdminService {
 			@Override
 			public Predicate toPredicate(Root<SysAdmin> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 				// TODO Auto-generated method stub
-				return query.getRestriction();
+				List<Predicate> predicates = new ArrayList<Predicate>();
+				predicates.add(cb.equal(root.get("state").as(String.class), "1"));
+				if(predicates.isEmpty()){
+					return query.getRestriction();
+				} else{
+					query.where(cb.and(predicates.toArray(new Predicate[predicates.size()])));
+					return query.getRestriction();
+				}
+				
 			}
 		}; 
 		Page<SysAdmin> pageObj = sysAdminDao.findAll(spec,page);

@@ -1,5 +1,7 @@
 package com.lulu.ofarm.net.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,6 +77,12 @@ public class SysAdminController {
 		}
 		outPrintResult(response, msg);
 	}
+	
+	@RequestMapping("/delAdmin")
+	public void delAdmin(HttpServletResponse response,@RequestParam(name = "idArr") List<String>idList){
+		
+	}
+	
 	
 	@RequestMapping("/findAdminByLoginname")
 	public @ResponseBody SysAdmin findAdminByLoginname(String loginname){

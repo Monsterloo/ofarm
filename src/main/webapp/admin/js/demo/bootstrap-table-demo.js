@@ -195,10 +195,42 @@ function buildTable($el, cells, rows) {
       },
       queryParamsType:'', //默认值为 'limit' ,在默认情况下 传给服务端的参数为：offset,limit,sort
       					  // 设置为 ''  在这种情况下传给服务器的参数为：pageSize,pageNumber
-      sidePagination: "server"   //分页方式：client客户端分页，server服务端分页（*）
+      sidePagination: "server",  //分页方式：client客户端分页，server服务端分页（*）
       //queryParams: queryParams//前端调用服务时，会默认传递上边提到的参数，如果需要添加自定义参数，可以自定义一个函数返回请求参数
+      columns: [{
+          checkbox: true
+      }, {
+          field: 'id',
+          title: 'id',
+          visible : false
+      }, {
+          field: 'loginname',
+          title: '人员帐号'
+      }, {
+          field: 'password',
+          title: '密码'
+      }, {
+          field: 'phone',
+          title: '手机号码'
+      }, {
+          field: 'email',
+          title: '邮箱地址'
+      }, {
+          field: 'createtime',
+          title: '创建时间'
+      }, { 
+          field: 'roletype',
+          title: '角色'
+      }]
     });
 
+    /*{
+        field: 'phone',
+        title: '图片',
+        formatter: function(value,row,index){
+            return '<img  src="http://localhost:8080/ofarm/admin/css/plugins/zTree/zTreeStyle/img/diy/3.png" />';
+      }*/
+    
     /*var $result = $('#examplebtTableEventsResult');
     var check = $("checkbox");
 
