@@ -9,6 +9,8 @@ public class ZtreeNode {
 	
 	private String isParent;
 
+	private String state;
+	
 	public String getId() {
 		return id;
 	}
@@ -39,6 +41,21 @@ public class ZtreeNode {
 
 	public void setIsParent(String isParent) {
 		this.isParent = isParent;
+	}
+
+	
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
+	}
+
+	@Override
+	public String toString() {
+		return "ZtreeNode [id=" + id + ", pId=" + pId + ", name=" + name + ", isParent=" + isParent + ", state=" + state
+				+ "]";
 	}
 	
 }

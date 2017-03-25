@@ -7,7 +7,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.lulu.ofarm.net.entity.Category;
@@ -38,12 +40,24 @@ public class CategoryController {
 				z.setName(c.getCname());
 				z.setpId(c.getParentid());
 				z.setIsParent(c.getIsParent());
+				z.setState(c.getState());
 				zList.add(z);
 			}
 			return zList;
 		}else{
 			return null;
 		}
+	}
+	
+	@RequestMapping(value = "/saveCategoryTree")
+	public void saveCategoryTree(HttpServletResponse response, @RequestBody List<ZtreeNode> nodeList){
+		for(ZtreeNode node : nodeList){
+			System.out.println(node.toString());
+		}
+		String returnStr = "";
+		categoryService.save(nodeList);
+		returnStr = "success";
+		outPrintResult(response, returnStr);
 	}
 	
 	private void outPrintResult(HttpServletResponse response,String returnStr) {

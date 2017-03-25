@@ -121,10 +121,15 @@
 				}
 			};
 			
-			function filter(treeId, parentNode, childNodes) {
+			function filter(treeId, parentNode, childNodes){
 				if (!childNodes) return null;
 				for (var i=0, l=childNodes.length; i<l; i++) {
 					childNodes[i].name = childNodes[i].name.replace(/\.n/g, '.');
+					if(childNodes[i].pId == "0" || childNodes[i].isParent == true){
+						childNodes[i].icon = "${ctx}/admin/css/plugins/zTree/zTreeStyle/img/diy/8.png";
+					}else{
+						childNodes[i].icon = "${ctx}/admin/css/plugins/zTree/zTreeStyle/img/diy/3.png";
+					}
 				}
 				return childNodes;
 			}
@@ -324,13 +329,13 @@
 			}
 
 			function showLog(str) {
-				if(!log) log = $("#log");
-				log.append("<li class='" + className + "'>" + str + "</li>");
+				if (!log) log = $("#log");
+				log.append("<li class='"+className+"'>"+str+"</li>");
 				if(log.children("li").length > 8) {
 					log.get(0).removeChild(log.children("li")[0]);
 				}
 			}
-
+			
 			function getTime() {
 				var now = new Date(),
 					h = now.getHours(),
@@ -344,6 +349,7 @@
 
 			//添加节点
 			function addHoverDom(treeId, treeNode) {
+				if(treeNode.level != 0) return;
 				var sObj = $("#" + treeNode.tId + "_span");
 				if(treeNode.editNameFlag || $("#addBtn_" + treeNode.tId).length > 0) return;
 				var addStr = "<span class='button add' id='addBtn_" + treeNode.tId +
@@ -352,7 +358,7 @@
 				var btn = $("#addBtn_" + treeNode.tId);
 				if(btn) btn.bind("click", function() {
 					var zTree = $.fn.zTree.getZTreeObj("treeDemo");
-					zTree.addNodes(treeNode, { id: (uuid(32,16)), pId: treeNode.id, name: "new node" + (newCount++) });
+					zTree.addNodes(treeNode, { id: (uuid(32,16)), pId: treeNode.id, name: "new node" + (newCount++),icon: "${ctx}/admin/css/plugins/zTree/zTreeStyle/img/diy/3.png" });
 					return false;
 				});
 			};
@@ -377,27 +383,57 @@
 			*初始化
 			*/
 			$(document).ready(function() {
-				/* 				$.ajax({
-		    	url:'${ctx}/category/getAllCategory',
-		        type: 'POST',
-		        dataType: 'json',
-		        success: function (json) {
-		        	//console.info(JSON.stringify(json));
-		        	zNodes = json;
-		        }
-			}); */
+				reloadTree();
+				initEvents();
+			});
+			
+			//初始化类别树
+			function reloadTree(){
 				$.fn.zTree.init($("#treeDemo"), setting);
-			});
-
-			//保存
-			$("#save").click(function() {
+			}
+			
+			//初始化事件
+			function initEvents(){
 				var treeObj = $.fn.zTree.getZTreeObj("treeDemo");
-				var node = treeObj.getNodes();
-				var nodes = treeObj.transformToArray(node);
-				for(var i = 0; i < nodes.length; i++) {
-					console.info(nodes[i].id + "  " + nodes[i].pId + "  " + nodes[i].name+"  "+nodes[i].isParent);
-				}
-			});
+				
+				//保存
+				$("#save").click(function() {
+					var node = treeObj.getNodes();
+					var nodes = treeObj.transformToArray(node);
+					for(var i = 0; i < nodes.length; i++) {
+						nodes[i].state = "1";
+						if(nodes[i].pId == null || typeof(nodes[i].pId) == "undifined"){
+							nodes[i].pId = "0";
+						}
+						//console.info(nodes[i].id + "  " + nodes[i].pId + "  " + nodes[i].name+"  "+nodes[i].isParent+" "+nodes[i].state);
+					}
+					$.ajax({
+						url: '${ctx}/category/saveCategoryTree',
+						type: 'POST',
+						contentType:"application/json;charset=utf-8",
+						data: JSON.stringify(nodes),
+						success: function(data,status){
+							if(data == "success"){
+								alert("保存类别树成功!");
+								reloadTree();
+							}else{
+								alert("保存失败!");
+							}
+						}
+					});
+				});
+				
+				//展开所有
+				$('[data-action=expand-all]').click(function(){
+					treeObj.expandAll(true);
+				});
+				
+				//收起所有
+				$('[data-action=collapse-all]').click(function(){
+					treeObj.expandAll(false);
+				});
+			}
+			
 
 			//uuid			
 			function uuid(len, radix) {

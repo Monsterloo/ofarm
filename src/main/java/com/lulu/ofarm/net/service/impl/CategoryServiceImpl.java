@@ -34,10 +34,10 @@ public class CategoryServiceImpl implements CategoryService {
 	}
 
 	@Override
-	public void save(List<ZtreeNode> nodesList) {
+	public void save(List<ZtreeNode> nodeList) {
 		// TODO Auto-generated method stub
 		List<Category> categoryList = new ArrayList<Category>();
-		for(ZtreeNode node : nodesList){
+		for(ZtreeNode node : nodeList){
 			Category c = new Category();
 			c.setId(node.getId());
 			c.setCid(node.getId());
