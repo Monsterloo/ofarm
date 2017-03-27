@@ -20,6 +20,8 @@
 		<link href="${ctx}/admin/css/plugins/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
 		<link href="${ctx}/admin/css/animate.css" rel="stylesheet">
 		<link href="${ctx}/admin/css/style.css?v=4.1.0" rel="stylesheet">
+		<!-- Sweet Alert -->
+    	<link href="${ctx}/admin/css/plugins/sweetalert/sweetalert.css" rel="stylesheet">
 
 	</head>
 
@@ -116,8 +118,11 @@
 		<script src="${ctx}/admin/js/plugins/bootstrap-table/bootstrap-table-mobile.min.js"></script>
 		<script src="${ctx}/admin/js/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
 
-		<!-- Peity -->
+		<!-- Bootstrap table-admin -->
 		<script src="${ctx}/admin/js/demo/bootstrap-table-demo.js"></script>
+		
+		<!-- Sweet alert -->
+    	<script src="${ctx}/admin/js/plugins/sweetalert/sweetalert.min.js"></script>
 
 		<!-- BootstrapValidator-->
 		<script type="text/javascript" src="${ctx}/admin/js/bootstrapValidator.js" ></script>
@@ -263,8 +268,10 @@
 									$(".btn-white").click();
 									if(index == 1){
 										alert("修改成功!");
+										reloadTable();
 									}else{
 										alert("添加成功!");
+										reloadTable();
 									}
 									window.location.reload();
 								}
@@ -343,15 +350,40 @@
 						alert("请至少选择一条管理员项!");
 						return;
 					}else{
-						$.post('${ctx}/sysAdmin/delAdmin',{
-							'idArr' : adminIds
-						},function(data,status){
-							if(data == "success"){
-								alert("删除成功!");
-							}else{
-								alert("删除失败!");
-							}
-						});
+						swal({
+	                        title: "您确定要删除选中的信息吗",
+	                        text: "删除后将无法恢复，请谨慎操作！",
+	                        type: "warning",
+	                        showCancelButton: true,
+	                        confirmButtonColor: "#DD6B55",
+	                        confirmButtonText: "删除！",
+	                        cancelButtonText: "取消",
+	                        closeOnConfirm: false,
+	                        closeOnCancel: false
+	                    },
+	                    function (isConfirm) {
+	                        if (isConfirm) {
+	                        	$.post('${ctx}/sysAdmin/delAdmin',{
+	    							'idArr' : adminIds
+	    						},function(data,status){
+	    							if(data == "success"){
+	    								swal({
+	    				                    title: "删除成功！",
+	    				                    text: "您已经删除了选中的员工信息",
+	    				                    type: "success"
+	    				                }, function () {
+	    				                	window.location.reload();
+	    				                });
+	    								//swal("删除成功！", "您已经删除了选中的员工信息。", "success");
+	    							}else{
+	    								swal("删除失败", " :) ", "error");
+	    							}
+	    						});
+	                        } else {
+	                            swal("已取消", "您取消了删除操作！", "error");
+	                        }
+	                    });
+						
 					} 
 				});
 				

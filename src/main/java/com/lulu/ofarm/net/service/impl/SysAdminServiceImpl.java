@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
@@ -53,12 +54,21 @@ public class SysAdminServiceImpl implements SysAdminService {
 			admin.setState("2");
 		} else if("产品员工".equals(admin.getRoletype())){
 			admin.setState("3");
+		} else{
+			admin.setState("3");
 		}
 		return sysAdminDao.save(admin);	
 	}
 
 	public SysAdmin findByLoginname(String loginname) {
 		return sysAdminDao.findByLoginname(loginname);
+	}
+	
+	@Override
+	public void delAdminById(List<String> idList) {
+		for(String id : idList){
+			sysAdminDao.delete(id);
+		}
 	}
 
 	public String getTotalCount(){
@@ -69,13 +79,16 @@ public class SysAdminServiceImpl implements SysAdminService {
 		return (pageNumber-1)*pageSize;
 	}
 	
-	public Page<SysAdmin> findAllByPage(Pageable page){
+	public Page<SysAdmin> findAllByPage(Pageable page, final String loginname){
 		Specification<SysAdmin> spec = new Specification<SysAdmin>() {
 			
 			@Override
 			public Predicate toPredicate(Root<SysAdmin> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 				// TODO Auto-generated method stub
 				List<Predicate> predicates = new ArrayList<Predicate>();
+				if(null != loginname && !loginname.isEmpty()){
+					predicates.add(cb.like(root.get("loginname").as(String.class), "%"+loginname+"%"));
+				}
 				predicates.add(cb.equal(root.get("state").as(String.class), "1"));
 				if(predicates.isEmpty()){
 					return query.getRestriction();
@@ -89,4 +102,5 @@ public class SysAdminServiceImpl implements SysAdminService {
 		Page<SysAdmin> pageObj = sysAdminDao.findAll(spec,page);
 		return pageObj;
 	}
+
 }

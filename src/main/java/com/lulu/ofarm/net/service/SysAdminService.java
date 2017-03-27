@@ -1,5 +1,7 @@
 package com.lulu.ofarm.net.service;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -15,5 +17,7 @@ public interface SysAdminService {
 	
 	public int getPage(int pageSize, int pageNumber);
 	
-	public Page<SysAdmin> findAllByPage(Pageable page);
+	public Page<SysAdmin> findAllByPage(Pageable page, String loginname);
+	
+	public void delAdminById(List<String> idList);
 }

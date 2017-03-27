@@ -37,7 +37,7 @@ public class SysAdminController {
 		Sort sort =new Sort(Direction.ASC,"createtime");
 		
 		PageRequest pr = new PageRequest(pageNumber-1, pageSize,sort);
-		Page<SysAdmin> pageObj = sysAdminService.findAllByPage(pr);
+		Page<SysAdmin> pageObj = sysAdminService.findAllByPage(pr,searchText);
 		
 		bean.setTotal(pageObj.getTotalElements());
 		bean.setRows(pageObj.getContent());
@@ -79,8 +79,11 @@ public class SysAdminController {
 	}
 	
 	@RequestMapping("/delAdmin")
-	public void delAdmin(HttpServletResponse response,@RequestParam(name = "idArr") List<String>idList){
-		
+	public void delAdmin(HttpServletResponse response,@RequestParam(value = "idArr[]")List<String> idList){
+		String msg = "";
+		sysAdminService.delAdminById(idList);
+		msg = "success";
+		outPrintResult(response, msg);
 	}
 	
 	
