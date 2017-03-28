@@ -70,7 +70,7 @@
 							<span class="ng-scope">产品</span>
 						</li>
 						<li>
-							<a href="#"><i class="fa fa-envelope"></i> <span class="nav-label">产品列表</span><span class="label label-warning pull-right">16</span></a>
+							<a class="J_menuItem" href="${ctx }/product/main"><i class="fa fa-envelope"></i> <span class="nav-label">产品列表</span><span class="label label-warning pull-right">16</span></a>
 						</li>
 						<li>
 							<a class="J_menuItem" href="${ctx }/category/main"><i class="fa fa-desktop"></i> <span class="nav-label">产品类别管理</span>
