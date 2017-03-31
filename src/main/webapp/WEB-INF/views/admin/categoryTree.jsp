@@ -292,7 +292,25 @@
 				showLog("[ " + getTime() + " beforeRemove ]&nbsp;&nbsp;&nbsp;&nbsp; " + treeNode.name);
 				var zTree = $.fn.zTree.getZTreeObj("treeDemo");
 				zTree.selectNode(treeNode);
-				return confirm("确定删除 '" + treeNode.name + "' 类别及其子类别吗?");
+				if(confirm("确定删除 '" + treeNode.name + "' 类别及其子类别吗?")){
+					console.info(treeNode.id + "  " + treeNode.pId + "  " + treeNode.name+"  "+treeNode.isParent+" "+treeNode.state);
+					var id = treeNode.id;
+					$.ajax({
+						url: '${ctx}/category/delCategory',
+						type: 'POST',
+						contentType:"application/json;charset=utf-8",
+						data: JSON.stringify(treeNode),
+						success: function(data,status){
+							if(data == "success"){
+								alert("删除成功!");
+							}else{
+								alert("删除失败!");
+							}
+						}
+					});
+				}else{
+					return false;
+				}
 			}
 
 			//验证编辑
@@ -363,7 +381,7 @@
 				});
 			};
 
-			//删除节点
+			//改变hover
 			function removeHoverDom(treeId, treeNode) {
 				$("#addBtn_" + treeNode.tId).unbind().remove();
 			};

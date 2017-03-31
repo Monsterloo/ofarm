@@ -51,12 +51,11 @@ public class SysAdminServiceImpl implements SysAdminService {
 		if("管理员".equals(admin.getRoletype())){
 			admin.setRoletype("1");
 		} else if("人事员工".equals(admin.getRoletype())){
-			admin.setState("2");
+			admin.setRoletype("2");
 		} else if("产品员工".equals(admin.getRoletype())){
-			admin.setState("3");
-		} else{
-			admin.setState("3");
-		}
+			admin.setRoletype("3");
+		} 
+		admin.setState("1");
 		return sysAdminDao.save(admin);	
 	}
 

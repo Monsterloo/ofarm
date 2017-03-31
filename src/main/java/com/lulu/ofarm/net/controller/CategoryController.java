@@ -49,13 +49,21 @@ public class CategoryController {
 		}
 	}
 	
+	@RequestMapping("/delCategory")
+	public void delCategory(HttpServletResponse response,@RequestBody ZtreeNode treeNode){
+		String returnStr = "";
+		categoryService.delCategory(treeNode);
+		returnStr = "success";
+		outPrintResult(response, returnStr);
+	}
+	
 	@RequestMapping(value = "/saveCategoryTree")
 	public void saveCategoryTree(HttpServletResponse response, @RequestBody List<ZtreeNode> nodeList){
 		for(ZtreeNode node : nodeList){
 			System.out.println(node.toString());
 		}
 		String returnStr = "";
-		categoryService.save(nodeList);
+		categoryService.saveAll(nodeList);
 		returnStr = "success";
 		outPrintResult(response, returnStr);
 	}

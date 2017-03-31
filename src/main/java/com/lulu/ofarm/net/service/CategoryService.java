@@ -9,5 +9,11 @@ public interface CategoryService {
 	
 	public List<Category> getAllCategory();
 	
-	public void save(List<ZtreeNode> nodesList);
+	public void save(ZtreeNode node);
+	
+	public void saveAll(List<ZtreeNode> nodeList);
+	
+	public void delAllCategory();
+
+	public void delCategory(ZtreeNode treeNode);
 }
