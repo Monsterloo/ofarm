@@ -293,7 +293,7 @@
 				var zTree = $.fn.zTree.getZTreeObj("treeDemo");
 				zTree.selectNode(treeNode);
 				if(confirm("确定删除 '" + treeNode.name + "' 类别及其子类别吗?")){
-					console.info(treeNode.id + "  " + treeNode.pId + "  " + treeNode.name+"  "+treeNode.isParent+" "+treeNode.state);
+					/* console.info(treeNode.id + "  " + treeNode.pId + "  " + treeNode.name+"  "+treeNode.isParent+" "+treeNode.state);
 					var id = treeNode.id;
 					$.ajax({
 						url: '${ctx}/category/delCategory',
@@ -307,7 +307,7 @@
 								alert("删除失败!");
 							}
 						}
-					});
+					}); */
 				}else{
 					return false;
 				}
