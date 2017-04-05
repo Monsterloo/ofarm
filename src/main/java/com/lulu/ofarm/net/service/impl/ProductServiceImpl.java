@@ -1,6 +1,7 @@
 package com.lulu.ofarm.net.service.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -22,6 +23,7 @@ import com.lulu.ofarm.net.dao.CategoryDao;
 import com.lulu.ofarm.net.dao.ProductDao;
 import com.lulu.ofarm.net.entity.Product;
 import com.lulu.ofarm.net.service.ProductService;
+import com.lulu.ofarm.net.util.DateUtils;
 import com.lulu.ofarm.net.webmodel.ProductBean;
 
 @Component
@@ -78,8 +80,16 @@ public class ProductServiceImpl implements ProductService {
 	
 	@Override
 	public void save(Product product) {
-		// TODO Auto-generated method stub
-		
+		if(product.getCreatetime() == null || "".equals(product.getCreatetime())){
+			Date date = new Date();
+			product.setCreatetime(DateUtils.DateToString_14a(date));
+		}
+		product.setState("1");
+		productDao.save(product);
 	}
 
+	@Override
+	public Product findProductById(String id) {
+		return productDao.findOne(id);
+	}
 }

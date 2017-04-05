@@ -61,11 +61,11 @@ public class Product implements Serializable {
 		this.pid = pid;
 	}
 
-	public String getCreattime() {
+	public String getCreatetime() {
 		return this.createtime;
 	}
 
-	public void setCreattime(String createtime) {
+	public void setCreatetime(String createtime) {
 		this.createtime = createtime;
 	}
 

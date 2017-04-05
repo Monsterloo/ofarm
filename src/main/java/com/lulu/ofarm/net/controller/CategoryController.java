@@ -49,6 +49,16 @@ public class CategoryController {
 		}
 	}
 	
+	@RequestMapping("/findAllCategoryEntity")
+	public @ResponseBody List<Category> findAllCategoryEntity(HttpServletResponse response){
+		List<Category> cList = categoryService.getAllCategory();
+		if(cList != null){
+			return cList;
+		}else{
+			return null;
+		}
+	}
+	
 	@RequestMapping("/delCategory")
 	public void delCategory(HttpServletResponse response,@RequestBody ZtreeNode treeNode){
 		String returnStr = "";

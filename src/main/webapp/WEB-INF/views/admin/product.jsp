@@ -99,15 +99,15 @@
 							<div class="form-group"><label>产品名字</label>
 								<input type="text" id="pname" name="pname" placeholder="请输入产品名字" class="form-control"></div>
 							<div class="form-group"><label>产品类别</label>
-								<select id="pcategory" class="selectpicker col-sm-9" data-hide-disabled="true" data-live-search="true">
-								    <optgroup label="Fruit">
+								<select id="pcategory" class="selectpicker col-sm-9 show-tick" data-style="btn-info" data-size="7" data-hide-disabled="true" data-live-search="true">
+								    <!-- <optgroup label="Fruit">
 								      <option>Apple</option>
 								      <option>Orange</option>
 								    </optgroup>
 								    <optgroup label="Vegetable">
 								      <option>Corn</option>
 								      <option>Carrot</option>
-								    </optgroup>
+								    </optgroup> -->
 								 </select>
 							</div>
 							<div class="form-group"><label>单价</label>
@@ -124,7 +124,8 @@
                                     <div id="dndArea" class="placeholder">
                                         <div id="uploadimg"> 
 											<div id="fileList" class="uploader-list"></div> 
-											<div id="imgPicker">选择图片</div> 
+											<div id="upInfo" ></div>
+											<div id="filePicker">选择图片</div> 
 										</div>
                                     </div>
                                 </div>

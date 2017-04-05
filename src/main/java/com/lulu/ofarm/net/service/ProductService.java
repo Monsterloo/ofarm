@@ -14,5 +14,7 @@ public interface ProductService {
 	
 	public Page<Product> findProductByPage(Pageable page);
 	
+	public Product findProductById(String id);
+	
 	public void save(Product product);
 }
