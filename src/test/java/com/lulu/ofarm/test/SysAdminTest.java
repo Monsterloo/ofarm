@@ -67,7 +67,7 @@ public class SysAdminTest {
 		node.setpId("0");
 		List<ZtreeNode> list = new ArrayList<ZtreeNode>();
 		list.add(node);
-		categoryService.save(list);
+		//categoryService.save(list);
 	}
 	
 	@Test

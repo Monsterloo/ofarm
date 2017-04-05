@@ -35,19 +35,6 @@ public class CategoryServiceImpl implements CategoryService {
 	}
 
 	public void save(ZtreeNode node) {
-		/*// TODO Auto-generated method stub
-		Category c = new Category();
-		c.setId(node.getId());
-		c.setCid(node.getId());
-		c.setCname(node.getName());
-		c.setParentid(node.getpId());
-		if("true".equals(node.getIsParent())){
-			c.setIsParent("true");
-		}else{
-			c.setIsParent("false");
-		}
-		c.setState("1");
-		categoryDao.save(c);*/
 		Category c = categoryDao.findOne(node.getId());
 		c.setCname(node.getName());
 		c.setIsParent(node.getIsParent());

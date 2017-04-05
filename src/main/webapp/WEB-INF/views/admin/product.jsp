@@ -36,13 +36,22 @@
 					<div class="example">
 
 						<div class="btn-group hidden-xs" id="exampleTableEventsToolbar" role="group">
-							<button type="button" class="btn btn-outline btn-default" data-toggle="modal" data-target="#myModal" data-keyboard="true">
+							<!-- <button type="button" class="btn btn-outline btn-default" data-toggle="modal" data-target="#myModal" data-keyboard="true">
                                         <i class="glyphicon glyphicon-plus" aria-hidden="true"></i>
                                     </button>
 							<button type="button" class="btn btn-outline btn-default" data-keyboard="true" id="editbtn">
                                         <i class="glyphicon glyphicon-pencil" aria-hidden="true"></i>
                                     </button>
 							<button type="button" class="btn btn-outline btn-default">
+                                        <i class="glyphicon glyphicon-trash" aria-hidden="true"></i>
+                                    </button> -->
+                            <button type="button" class="btn btn-outline btn-default" id="insertbtn" data-keyboard="true">
+                                        <i class="glyphicon glyphicon-plus" aria-hidden="true"></i>
+                                    </button>
+							<button type="button" class="btn btn-outline btn-default" id="editbtn">
+                                        <i class="glyphicon glyphicon-pencil" aria-hidden="true"></i>
+                                    </button>
+							<button type="button" class="btn btn-outline btn-default" id="delbtn">
                                         <i class="glyphicon glyphicon-trash" aria-hidden="true"></i>
                                     </button>
 						</div>
@@ -159,25 +168,14 @@
     	<!-- bootstrap-select -->
     	<script src="${ctx}/admin/js/plugins/bootstrap-select/bootstrap-select.js"></script>
 
+		<!-- BootstrapValidator-->
+		<script type="text/javascript" src="${ctx}/admin/js/bootstrapValidator.js" ></script>
+		
 		<!-- product.js -->
 		<script src="${ctx}/admin/js/product.js"></script>
 
-		<!-- BootstrapValidator-->
-		<script type="text/javascript" src="${ctx}/admin/js/bootstrapValidator.js" ></script>
-
 		<script type="text/javascript" type="text/javascript">
-		var uploader = WebUploader.create({ 
-			auto: true, // 选完文件后，是否自动上传 
-			swf: 'js/plugins/webuploader/Uploader.swf', // swf文件路径 
-			server: '#', // 文件接收服务端 
-			pick: '#imgPicker', // 选择文件的按钮。可选 
-			// 只允许选择图片文件。 
-			 accept: { 
-			 title: 'Images', 
-			 extensions: 'gif,jpg,jpeg,bmp,png', 
-			 mimeTypes: 'image/*' 
-			 } 
-			});
+			
 		</script>
 	</body>
 

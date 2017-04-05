@@ -18,5 +18,4 @@ public class PageResultForBootstrap<T> {
 		this.rows = rows;
 	}
 	
-	
 }

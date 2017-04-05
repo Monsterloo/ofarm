@@ -1,57 +1,23 @@
-/*!
- * Remark (http://getbootstrapadmin.com/remark)
- * Copyright 2015 amazingsurge
- * Licensed under the Themeforest Standard Licenses
- */
-function cellStyle(value, row, index) {
-  var classes = ['active', 'success', 'info', 'warning', 'danger'];
+var ProductObj = {};
 
-  if (index % 2 === 0 && index / 2 < classes.length) {
-    return {
-      classes: classes[index / 2]
-    };
-  }
-  return {};
-}
 
-function rowStyle(row, index) {
-  var classes = ['active', 'success', 'info', 'warning', 'danger'];
+/*(function(document, window, $) {
 
-  if (index % 2 === 0 && index / 2 < classes.length) {
-    return {
-      classes: classes[index / 2]
-    };
-  }
-  return {};
-}
+  (function() {
+	  ProductObj.reloadTable();
+	  ProductObj.initEvents();
+	  
+  })();
+})(document, window, jQuery);*/
 
-function scoreSorter(a, b) {
-  if (a > b) return 1;
-  if (a < b) return -1;
-  return 0;
-}
+$(document).ready(function() {
+	ProductObj.reloadTable();
+	ProductObj.initEvents();
+});
 
-function nameFormatter(value) {
-  return value + '<i class="icon wb-book" aria-hidden="true"></i> ';
-}
-
-function starsFormatter(value) {
-  return '<i class="icon wb-star" aria-hidden="true"></i> ' + value;
-}
-
-function queryParams(params) {
-  return {
-    type: 'owner',
-    sort: 'updated',
-    direction: 'desc',
-    per_page: 100,
-    page: 1
-  };
-}
-
- function reloadTable(){
+ProductObj.reloadTable = function(){
 	  $('#exampleTableEvents').bootstrapTable({
-	      url: "js/demo/bootstrap_table_test.json",
+	      url: "../product/findProductByPage",
 	      search: true,
 	      striped: true,
 		  clickToSelect: true,
@@ -83,8 +49,13 @@ function queryParams(params) {
 	      }, {
 	          field: 'pcategory',
 	          title: '产品类别',
-	          searchable: true
+	          searchable: false,
+	          visible : false
 	      }, {
+	          field: 'pcategoryName',
+	          title: '产品类别名字',
+	          searchable: true
+	      },{
 	          field: 'price',
 	          title: '单价',
 	          searchable: true
@@ -100,7 +71,7 @@ function queryParams(params) {
 	          field: 'pimg',
 	          title: '图片',
 		      formatter: function(value,row,index){
-	            return '<img  src="css/plugins/zTree/zTreeStyle/img/diy/3.png" />';
+	            return '<img  src="../admin/css/plugins/zTree/zTreeStyle/img/diy/3.png" />';
 		      }
 	      }, { 
 	          field: 'inventory',
@@ -109,12 +80,6 @@ function queryParams(params) {
 	      }]
 	    });
 
-	    /*{
-	        field: 'phone',
-	        title: '图片',
-	        formatter: function(value,row,index){
-	            return '<img  src="http://localhost:8080/ofarm/admin/css/plugins/zTree/zTreeStyle/img/diy/3.png" />';
-	      }*/
 	    
 	    /*var $result = $('#examplebtTableEventsResult');
 	    var check = $("checkbox");
@@ -162,10 +127,41 @@ function queryParams(params) {
 	      });*/
   }
 
-(function(document, window, $) {
-  // Example Bootstrap Table Events
-  // ------------------------------
-  (function() {
-     reloadTable();
-  })();
-})(document, window, jQuery);
+ProductObj.initEvents = function(){
+	//添加信息
+	$("#insertbtn").bind("click",function(){
+		$("#myModal").modal("show");
+		$('#infoform').data('bootstrapValidator').resetForm(true);
+		$("#loginname").removeAttr("readOnly");
+		$("#id").val();
+		$("#createtime").val();
+		$("#roletype").val();
+		$("#state").val();
+		$(".modal-title").html("添加员工信息");
+	});
+}
+
+
+function queryParams(params) {
+  return {
+    type: 'owner',
+    sort: 'updated',
+    direction: 'desc',
+    per_page: 100,
+    page: 1
+  };
+}
+
+var uploader = WebUploader.create({ 
+	auto: true, // 选完文件后，是否自动上传 
+	swf: 'js/plugins/webuploader/Uploader.swf', // swf文件路径 
+	server: '#', // 文件接收服务端 
+	pick: '#imgPicker', // 选择文件的按钮。可选 
+	// 只允许选择图片文件。 
+	 accept: { 
+	 title: 'Images', 
+	 extensions: 'gif,jpg,jpeg,bmp,png', 
+	 mimeTypes: 'image/*' 
+	 } 
+});
+
