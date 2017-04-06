@@ -16,5 +16,7 @@ public interface ProductService {
 	
 	public Product findProductById(String id);
 	
-	public void save(Product product);
+	public Product saveProductImgURL(String id, String newFileName);
+	
+	public Product save(Product product);
 }

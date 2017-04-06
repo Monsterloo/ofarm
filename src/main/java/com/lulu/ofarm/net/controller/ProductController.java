@@ -47,11 +47,9 @@ public class ProductController {
 	}
 	
 	@RequestMapping("/insertProduct")
-	public void insertAdmin(Product p,HttpServletResponse response){
-		String msg = "";
-		productService.save(p);
-		msg = "Successful";
-		outPrintResult(response, msg);
+	public @ResponseBody Product insertAdmin(Product p,HttpServletResponse response){
+		Product save = productService.save(p);
+		return save;
 	}
 	
 	@RequestMapping("/findProductByPage")
@@ -77,7 +75,7 @@ public class ProductController {
 	}
 	
 	@RequestMapping("uploader")
-    public void upload(HttpServletRequest request,HttpServletResponse response){
+    public void upload(HttpServletRequest request,HttpServletResponse response,String pid){
 		System.out.println("收到图片!");
         MultipartHttpServletRequest Murequest = (MultipartHttpServletRequest)request;
         Map<String, MultipartFile> files = Murequest.getFileMap();//得到文件map对象
@@ -88,10 +86,47 @@ public class ProductController {
             dir.mkdirs();
         for(MultipartFile file :files.values()){
             String fileName=file.getOriginalFilename();
-            File tagetFile = new File(upaloadUrl+fileName);//创建文件对象
-            if(!tagetFile.exists()){//文件名不存在 则新建文件，并将文件复制到新建文件中
+            int nameIndex = fileName.lastIndexOf(".");
+            if(nameIndex <= 0){
+            	String resStr = "<script type='text/javascript' type='text/javascript'>"+
+            			"swal({"+	
+                            "title: '上传失败',"+
+                            "text: '请上传图片格式文件',"+
+                            "type: 'error'"+
+                        "}, function () {});"+
+                       "</script>";
+            	outPrintResult(response,resStr);
+            	return;
+            }
+            String ext = fileName.substring(nameIndex).trim();
+            if(!".gif".equals(ext) && !".jpg".equals(ext) && !".jpeg".equals(ext) && !".bmp".equals(ext) && !".png".equals(ext)){
+            	String resStr = "<script type='text/javascript' type='text/javascript'>"+
+            			"swal({"+
+                            "title: '上传失败',"+
+                            "text: '请上传图片格式文件',"+
+                            "type: 'error'"+
+                        "}, function () {});"+
+                       "</script>";
+            	outPrintResult(response,resStr);
+            	return;
+            }
+            if(file.getSize() > 2*1024*1024){
+            	String resStr = "<script type='text/javascript' type='text/javascript'>"+
+            			"swal({"+
+                            "title: '上传失败',"+
+                            "text: '文件大小不能超过2M',"+
+                            "type: 'error'"+
+                        "}, function () {});"+
+                       "</script>";
+            	outPrintResult(response,resStr);
+            	return;
+            }
+            String newFileName = pid+ext;
+            File tagetFile = new File(upaloadUrl+newFileName);//创建文件对象
+            //if(!tagetFile.exists()){//文件名不存在 则新建文件，并将文件复制到新建文件中
                 try {
                     tagetFile.createNewFile();
+                    productService.saveProductImgURL(pid, newFileName);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -103,7 +138,7 @@ public class ProductController {
                     e.printStackTrace();
                 }
 
-            }
+            //}
         }
     System.out.println("接收完毕");
 }

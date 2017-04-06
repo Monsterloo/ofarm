@@ -79,17 +79,25 @@ public class ProductServiceImpl implements ProductService {
 	}
 	
 	@Override
-	public void save(Product product) {
+	public Product save(Product product) {
 		if(product.getCreatetime() == null || "".equals(product.getCreatetime())){
 			Date date = new Date();
 			product.setCreatetime(DateUtils.DateToString_14a(date));
 		}
 		product.setState("1");
-		productDao.save(product);
+		return productDao.save(product);
 	}
 
 	@Override
 	public Product findProductById(String id) {
 		return productDao.findOne(id);
+	}
+
+	@Override
+	public Product saveProductImgURL(String id, String newFileName) {
+		Product bean = productDao.findOne(id);
+		bean.setPimg("{ctx}/upload/"+newFileName);
+		Product newBean = productDao.save(bean);
+		return newBean;
 	}
 }

@@ -1,46 +1,66 @@
 var ProductObj = {};
 var nodeArr = [];
 var sonnodeArr = [];
+var index = 0;
+
+//Web Uploader实例
 var uploader;
-//优化retina, 在retina下这个值是2
-ratio = window.devicePixelRatio || 1,
-// 缩略图大小
-thumbnailWidth = 100 * ratio,
-thumbnailHeight = 100 * ratio,
 
-/*(function(document, window, $) {
-
-  (function() {
-	  ProductObj.reloadTable();
-	  ProductObj.initEvents();
-	  
-  })();
-})(document, window, jQuery);*/
-
-$(document).ready(function() {
+jQuery(function() {
 	ProductObj.reloadTable();
 	ProductObj.initEvents();
 	ProductObj.bootstrapValidator();
 	//ProductObj.initUpload();
-	$list = $('#fileList');
 });
 
 ProductObj.initUpload = function(){
+	var $ = jQuery,
+	$list = $('#fileList'),
+    // 优化retina, 在retina下这个值是2
+    ratio = window.devicePixelRatio || 1,
+    // 缩略图大小
+    thumbnailWidth = 100 * ratio,
+    thumbnailHeight = 100 * ratio;
 	uploader = WebUploader.create({ 
-		auto: true, // 选完文件后，是否自动上传 
+		auto: false, // 选完文件后，是否自动上传 
 		swf: '../admin/js/plugins/webuploader/Uploader.swf', // swf文件路径 
 		server: '../product/uploader', // 文件接收服务端 
 		pick: '#filePicker', // 选择文件的按钮。可选 
 		threads:'5',        //同时运行5个线程传输
         fileNumLimit:'1',  //文件总数量只能选择1个 
-        fileSingleSizeLimit: 1 * 1024,    // 5 M
+        fileSingleSizeLimit: 2 * 1024* 1024,    // 2 M
         resize : false,// 不压缩image, 默认如果是jpeg，文件上传前会压缩一把再上传！
 		// 只允许选择图片文件。 
 		accept: { 
-		title: 'Images', 
-		extensions: 'gif,jpg,jpeg,bmp,png', 
-		mimeTypes: 'image/*' 
+			title: 'Images', 
+			extensions: 'gif,jpg,jpeg,bmp,png', 
+			mimeTypes: 'image/*' 
 		}
+	});
+	
+	/**
+     * 验证文件格式以及文件大小
+     */
+	uploader.on( 'error', function( handler ) {
+		console.info(handler);
+		if (handler=="Q_TYPE_DENIED"){
+			swal({
+                title: "上传失败",
+                text: "请上传图片格式文件",
+                type: "error"
+            }, function () {
+            	
+            });
+        }else if(handler=="Q_EXCEED_SIZE_LIMIT"){
+        	swal({
+                title: "上传失败",
+                text: "文件大小不能超过2M",
+                type: "error"
+            }, function () {
+            	
+            });
+        }
+
 	});
 	
 	// 当有文件添加进来的时候，创建img显示缩略图使用
@@ -69,7 +89,7 @@ ProductObj.initUpload = function(){
         }, thumbnailWidth, thumbnailHeight );
     });
 
- // 文件上传过程中创建进度条实时显示。    uploadProgress事件：上传过程中触发，携带上传进度。 file文件对象 percentage传输进度 Nuber类型
+    // 文件上传过程中创建进度条实时显示。    uploadProgress事件：上传过程中触发，携带上传进度。 file文件对象 percentage传输进度 Nuber类型
     uploader.on( 'uploadProgress', function( file, percentage ) {
         var $li = $( '#'+file.id ),
             $percent = $li.find('.progress span');
@@ -86,9 +106,9 @@ ProductObj.initUpload = function(){
 
     // 文件上传成功时候触发，给item添加成功class, 用样式标记上传成功。 file：文件对象，    response：服务器返回数据
     uploader.on( 'uploadSuccess', function( file,response) {
-        $( '#'+file.id ).addClass('upload-state-done');
-        //console.info(response);
-      $("#upInfo").html("<font color='red'>"+response._raw+"</font>");
+	    $( '#'+file.id ).addClass('upload-state-done');
+	    //console.info(response);
+	    $("#upInfo").html("<font color='red'>"+response._raw+"</font>");
     });
 
     // 文件上传失败                                file:文件对象 ， code：出错代码
@@ -102,11 +122,14 @@ ProductObj.initUpload = function(){
         }
 
         $error.text('上传失败!');
+        
     });
+    
 
     // 不管成功或者失败，文件上传完成时触发。 file： 文件对象
     uploader.on( 'uploadComplete', function( file ) {
         $( '#'+file.id ).find('.progress').remove();
+        //that.removeFile( file,true );
     });
 
 }
@@ -163,6 +186,20 @@ ProductObj.bootstrapValidator = function(){
                         // /^([1-9]+(\.[0-9]{2})?|0\.[1-9][0-9]|0\.0[1-9])$ 不允许0的话
                      }
             	}
+        	},
+        	
+        	punit:{
+        		message: '产品单位验证失败',
+        		validators: {
+                    notEmpty: {
+                        message: '产品单位不能为空'
+                    },
+                    stringLength: {
+                        min: 1,
+                        max: 5,
+                        message: '产品单位长度必须在1到5位之间'
+                    }
+                }
         	},
         	
         	origin:{
@@ -235,12 +272,12 @@ ProductObj.reloadTable = function(){
 	          searchable: true
 	      }, {
 	          field: 'pcategory',
-	          title: '产品类别',
+	          title: '产品类别编号',
 	          searchable: false,
 	          visible : false
 	      }, {
 	          field: 'pcategoryName',
-	          title: '产品类别名字',
+	          title: '产品类别',
 	          searchable: true
 	      },{
 	          field: 'price',
@@ -258,7 +295,7 @@ ProductObj.reloadTable = function(){
 	          field: 'pimg',
 	          title: '图片',
 		      formatter: function(value,row,index){
-	            return '<img  src="../admin/css/plugins/zTree/zTreeStyle/img/diy/3.png" />';
+	            return '<img  src="'+value+'" />';
 		      }
 	      }, { 
 	          field: 'inventory',
@@ -342,7 +379,7 @@ ProductObj.submit = function(index){
 			type:"POST",
 			url:url,
 			async:true,
-			dataType:'text',
+			dataType:'json',
 			data: {
 				'id':id,
 				'pname':pname,
@@ -355,10 +392,14 @@ ProductObj.submit = function(index){
 				'state':state
 			},
 			success:function(data){
-				if(data == "Successful"){
+				if(data != null){
+					console.info(data);
+					// 初始化以后添加  
+					uploader.options.formData.pid = data.pid;
+					uploader.upload(); //执行手动图片提交
 					swal({
 	                    title: "保存成功!",
-	                    text: "成功保存"+pname,
+	                    text: "成功保存"+data.pname,
 	                    type: "success"
 	                }, function () {
 	                	$("#myModal").modal("hide");
@@ -371,6 +412,9 @@ ProductObj.submit = function(index){
 				alert("出错误!!");
 			}
 		});
+		
+		//***************uploader.upload();   //执行手动提交
+		
 		/*if($(".modal-title").html()=="修改产品信息"){
 			index = 1;
 			url = "../sysAdmin/updateAdmin";
@@ -433,15 +477,24 @@ ProductObj.initEvents = function(){
 		ProductObj.submit(1);
 	});
 	
+	//关闭模态框
 	$('#myModal').on('hide.bs.modal', function () {
 	    uploader.destroy();
 	});
 	
+	//显示模态框
+	$('#myModal').on('shown.bs.modal', function () {
+        
+    });
+    
+	
 	//添加信息
 	$("#insertbtn").bind("click",function(){
-		ProductObj.initUpload();
+		index = 0;
 		$("#myModal").modal("show");
 		$('#infoform').data('bootstrapValidator').resetForm(true);
+		// 当domReady的时候开始初始化
+        ProductObj.initUpload();
 		/*$("#loginname").removeAttr("readOnly");
 		$("#id").val();
 		$("#createtime").val();
@@ -474,23 +527,10 @@ ProductObj.initEvents = function(){
 		});
 	});
 	
-	
-	/*$('#pcategory').on('loaded.bs.select', function (e) {
-		 console.info("loaded.bs.select");
-	});
-	
-	$('#pcategory').on('changed.bs.select', function (e) {
-		 console.info(e);
-	});*/
-	
 	//取消按钮
 	$('.btn-white').click(function() {
 		$('#infoform').data('bootstrapValidator').resetForm(true);
-		/*$("#id").val();
-		$("#createtime").val();
-		$("#roletype").val();
-		$("#state").val();*/
-     });
+    });
 }
 
 function getCategoryRootId(cList){

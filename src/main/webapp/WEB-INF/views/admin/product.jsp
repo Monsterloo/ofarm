@@ -6,8 +6,6 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 		<title>产品列表</title>
 		<meta name="keywords" content="">
@@ -148,7 +146,8 @@
 		<!-- End Panel Other -->
 		</div>
 
-		<!-- 全局js -->
+</body>
+<!-- 全局js -->
 		<script src="${ctx}/admin/js/jquery.min.js?v=2.1.4"></script>
 		<script src="${ctx}/admin/js/bootstrap.min.js?v=3.3.6"></script>
 
@@ -176,7 +175,7 @@
 		<script src="${ctx}/admin/js/product.js"></script>
 
 		<script type="text/javascript" type="text/javascript">
-			
-		</script>
-	</body>
 
+		</script>
+
+</html>
