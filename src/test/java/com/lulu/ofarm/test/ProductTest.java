@@ -28,7 +28,7 @@ public class ProductTest {
 		for(int i=0;i<5;++i){
 			Product p = new Product();
 			Date date = new Date();
-			p.setCreattime(DateUtils.DateToString_14a(date));
+			p.setCreatetime(DateUtils.DateToString_14a(date));
 			productDao.save(p);
 		}
 	}

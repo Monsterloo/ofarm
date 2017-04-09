@@ -1,5 +1,7 @@
 package com.lulu.ofarm.net.service;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -19,4 +21,6 @@ public interface ProductService {
 	public Product saveProductImgURL(String id, String newFileName);
 	
 	public Product save(Product product);
+
+	public void delProduct(List<String> pIds);
 }

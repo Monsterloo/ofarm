@@ -100,4 +100,11 @@ public class ProductServiceImpl implements ProductService {
 		Product newBean = productDao.save(bean);
 		return newBean;
 	}
+
+	@Override
+	public void delProduct(List<String> pIds) {
+		for(String pid : pIds){
+			productDao.delProduct(pid);
+		}
+	}
 }

@@ -24,6 +24,13 @@
     	<!-- webuploader -->
     	<link href="${ctx}/admin/css/plugins/webuploader/webuploader.css" rel="stylesheet">
 		<link rel="stylesheet" type="text/css" href="${ctx}/admin/css/demo/webuploader-demo.css">
+		<style type="text/css">
+			.formatImg{
+				width:70px;
+				height:60px;
+			}
+		</style>
+		
 </head>
 
 <body class="gray-bg">
@@ -127,7 +134,9 @@
 										</div>
                                     </div>
                                 </div>
+                            	</div>
                             </div>
+                            <input type="hidden" name="pimg" id="pimg" />
 							<input type="hidden" name="createtime" id="createtime" />
 							<input type="hidden" name="state" id="state" />
 						</form>

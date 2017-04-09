@@ -2,7 +2,9 @@ package com.lulu.ofarm.net.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -58,7 +60,7 @@ public class ProductController {
 		PageResultForBootstrap<ProductBean> beanObj = new PageResultForBootstrap<ProductBean>();
 		List<ProductBean> beanList = new ArrayList<ProductBean>();
 		
-		Sort sort =new Sort(Direction.ASC,"createtime");	
+		Sort sort =new Sort(Direction.ASC,"pname");	
 		PageRequest pr = new PageRequest(pageNumber-1, pageSize,sort);
 		Page<Product> pageObj = productService.findProductByPage(pr);
 		
@@ -75,7 +77,7 @@ public class ProductController {
 	}
 	
 	@RequestMapping("uploader")
-    public void upload(HttpServletRequest request,HttpServletResponse response,String pid){
+    public @ResponseBody Product upload(HttpServletRequest request,HttpServletResponse response, Product product, String index){
 		System.out.println("收到图片!");
         MultipartHttpServletRequest Murequest = (MultipartHttpServletRequest)request;
         Map<String, MultipartFile> files = Murequest.getFileMap();//得到文件map对象
@@ -84,64 +86,88 @@ public class ProductController {
         System.out.println(upaloadUrl);
         if(!dir.exists())//目录不存在则创建
             dir.mkdirs();
+        
+        Product save = null;
         for(MultipartFile file :files.values()){
-            String fileName=file.getOriginalFilename();
-            int nameIndex = fileName.lastIndexOf(".");
-            if(nameIndex <= 0){
-            	String resStr = "<script type='text/javascript' type='text/javascript'>"+
-            			"swal({"+	
-                            "title: '上传失败',"+
-                            "text: '请上传图片格式文件',"+
-                            "type: 'error'"+
-                        "}, function () {});"+
-                       "</script>";
-            	outPrintResult(response,resStr);
-            	return;
-            }
-            String ext = fileName.substring(nameIndex).trim();
-            if(!".gif".equals(ext) && !".jpg".equals(ext) && !".jpeg".equals(ext) && !".bmp".equals(ext) && !".png".equals(ext)){
-            	String resStr = "<script type='text/javascript' type='text/javascript'>"+
-            			"swal({"+
-                            "title: '上传失败',"+
-                            "text: '请上传图片格式文件',"+
-                            "type: 'error'"+
-                        "}, function () {});"+
-                       "</script>";
-            	outPrintResult(response,resStr);
-            	return;
-            }
-            if(file.getSize() > 2*1024*1024){
-            	String resStr = "<script type='text/javascript' type='text/javascript'>"+
-            			"swal({"+
-                            "title: '上传失败',"+
-                            "text: '文件大小不能超过2M',"+
-                            "type: 'error'"+
-                        "}, function () {});"+
-                       "</script>";
-            	outPrintResult(response,resStr);
-            	return;
-            }
-            String newFileName = pid+ext;
-            File tagetFile = new File(upaloadUrl+newFileName);//创建文件对象
-            //if(!tagetFile.exists()){//文件名不存在 则新建文件，并将文件复制到新建文件中
-                try {
-                    tagetFile.createNewFile();
-                    productService.saveProductImgURL(pid, newFileName);
-                } catch (IOException e) {
-                    e.printStackTrace();
+            if("0".equals(index) || ("1".equals(index) && file != null)){
+            	String fileName=file.getOriginalFilename();
+                int nameIndex = fileName.lastIndexOf(".");
+                if(nameIndex <= 0){
+                	String resStr = "<script type='text/javascript' type='text/javascript'>"+
+                			"swal({"+	
+                                "title: '上传失败',"+
+                                "text: '请上传图片格式文件',"+
+                                "type: 'error'"+
+                            "}, function () {});"+
+                           "</script>";
+                	outPrintResult(response,resStr);
+                	return null;
                 }
-                try {
-                    file.transferTo(tagetFile);
-                } catch (IllegalStateException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                String ext = fileName.substring(nameIndex).trim();
+                if(!".gif".equals(ext) && !".jpg".equals(ext) && !".jpeg".equals(ext) && !".bmp".equals(ext) && !".png".equals(ext)){
+                	String resStr = "<script type='text/javascript' type='text/javascript'>"+
+                			"swal({"+
+                                "title: '上传失败',"+
+                                "text: '请上传图片格式文件',"+
+                                "type: 'error'"+
+                            "}, function () {});"+
+                           "</script>";
+                	outPrintResult(response,resStr);
+                	return null;
                 }
+                if(file.getSize() > 2*1024*1024){
+                	String resStr = "<script type='text/javascript' type='text/javascript'>"+
+                			"swal({"+
+                                "title: '上传失败',"+
+                                "text: '文件大小不能超过2M',"+
+                                "type: 'error'"+
+                            "}, function () {});"+
+                           "</script>";
+                	outPrintResult(response,resStr);
+                	return null;
+                }
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+                Date date = new Date();
+                String newName = sdf.format(date);
+                String newFileName = newName+ext;
+                File tagetFile = new File(upaloadUrl+newFileName);//创建文件对象
+                //if(!tagetFile.exists()){//文件名不存在 则新建文件，并将文件复制到新建文件中
+                    try {
+                    	String oldFileName = product.getPimg().substring(product.getPimg().lastIndexOf("/")+1);
+                        File oldFile = new File(upaloadUrl+oldFileName);
+                        if(oldFile.isFile() && oldFile.exists()){
+                        	oldFile.delete();
+                        }
+                        tagetFile.createNewFile();
+                        product.setPimg("../upload/"+newFileName);
+                        save = productService.save(product);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        file.transferTo(tagetFile);
+                    } catch (IllegalStateException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
 
-            //}
+                //}
+            }else if("1".equals(index) && file == null){
+            	save = productService.save(product);
+            }
         }
-    System.out.println("接收完毕");
-}
+	    System.out.println("接收完毕");
+	    return save;
+	}
+	
+	@RequestMapping("/delProduct")
+	public void delProduct(HttpServletResponse response,@RequestParam(value = "pIds[]")List<String> pIds){
+		String msg = "";
+		productService.delProduct(pIds);
+		msg = "success";
+		outPrintResult(response, msg);
+	}
 	
 	private void outPrintResult(HttpServletResponse response,String returnStr) {
 		try {

@@ -1,7 +1,9 @@
 var ProductObj = {};
 var nodeArr = [];
 var sonnodeArr = [];
-var index = 0;
+var cArr = new Array();
+var selectcount = cArr.length;
+var index = 0;	//添加||编辑
 
 //Web Uploader实例
 var uploader;
@@ -12,6 +14,191 @@ jQuery(function() {
 	ProductObj.bootstrapValidator();
 	//ProductObj.initUpload();
 });
+
+ProductObj.reloadTable = function(){
+	  $('#exampleTableEvents').bootstrapTable({
+	      url: "../product/findProductByPage",
+	      search: true,
+	      striped: true,
+	      height: "600",
+		  clickToSelect: true,
+	      pagination: true,
+	      showRefresh: true,
+	      showToggle: true,
+	      showColumns: true,
+	      sortable: true,
+	      pageSize: 10,
+	   	  pageList: [10, 20, 30],
+	      iconSize: 'outline',
+	      toolbar: '#exampleTableEventsToolbar',
+	      icons: {
+	        refresh: 'glyphicon-repeat',
+	        toggle: 'glyphicon-list-alt',
+	        columns: 'glyphicon-list'
+	      },
+	      queryParamsType:'', //默认值为 'limit' ,在默认情况下 传给服务端的参数为：offset,limit,sort
+	      					  // 设置为 ''  在这种情况下传给服务器的参数为：pageSize,pageNumber
+	      sidePagination: "server",  //分页方式：client客户端分页，server服务端分页（*）
+	      //queryParams: queryParams,//前端调用服务时，会默认传递上边提到的参数，如果需要添加自定义参数，可以自定义一个函数返回请求参数
+	      columns: [{
+	          checkbox: true
+	      }, {
+	          field: 'pname',
+	          title: '产品名字',
+	          /*visible : false,*/
+	          searchable: true
+	      }, {
+	          field: 'pcategory',
+	          title: '产品类别编号',
+	          searchable: false,
+	          visible : false
+	      }, {
+	          field: 'pcategoryName',
+	          title: '产品类别',
+	          searchable: true
+	      },{
+	          field: 'price',
+	          title: '单价',
+	          searchable: true
+	      }, {
+	          field: 'punit',
+	          title: '单位',
+	          searchable: false
+	      }, {
+	          field: 'origin',
+	          title: '产地',
+	          searchable: false
+	      }, {
+	          field: 'pimgStr',
+	          title: '图片路径',
+	          visible : false
+	      }, {
+	          field: 'pimg',
+	          title: '图片',
+		      formatter: function(value,row,index){
+	            return '<img class="formatImg" src="'+value+'" />';
+		      }
+	      }, { 
+	          field: 'inventory',
+	          title: '库存数',
+	          searchable: false
+	      }]
+	    });
+
+	  $('#exampleTableEvents').on('all.bs.table', function(e, name, args) {
+			console.log('Event:', name, ', data:', args);
+		}).on('check.bs.table', function(e, row) {
+			cArr.push(row);
+			console.info(cArr);
+	        selectcount = cArr.length;
+	   	}).on('uncheck.bs.table', function(e, row) {
+	        cArr.splice($.inArray(row),1);
+	        console.info(cArr);
+	        selectcount = cArr.length;
+	    })
+		 //全选
+		 .on('check-all.bs.table', function(e,row) {
+			//$result.text('Event: check-all.bs.table');
+			var $result = $('#examplebtTableEventsResult');
+			var selects = $("td[class=bs-checkbox]").parent();
+			$(selects).addClass("selected");
+			cArr.splice(0,cArr.length);
+	        $.each(row,function(i,obj){
+	        	cArr.push(obj);
+	        });
+			console.info(cArr);
+			selectcount = cArr.length;
+		 })
+		 //取消全选
+		 .on('uncheck-all.bs.table', function(e,row) {
+			//$result.text('Event: uncheck-all.bs.table');
+			var $result = $('#examplebtTableEventsResult');
+			var selects = $("td[class=bs-checkbox]").parent();
+			$(selects).removeClass("selected");
+			cArr.splice(0,cArr.length);		//清除数组
+			console.info(cArr);
+			selectcount = cArr.length;
+		 });  
+	  
+	    /*$('#exampleTableEvents').on('all.bs.table', function(e, name, args) {
+	        console.log('Event:', name, ', data:', args);
+	      })
+	      .on('click-row.bs.table', function(e, row, $element) {
+	        $result.text('Event: click-row.bs.table');
+	      })
+	      .on('dbl-click-row.bs.table', function(e, row, $element) {
+	        $result.text('Event: dbl-click-row.bs.table');
+	      })
+	      .on('sort.bs.table', function(e, name, order) {
+	        $result.text('Event: sort.bs.table');
+	      })
+	      .on('check.bs.table', function(e, row) {
+	        $result.text('Event: check.bs.table');
+	      })
+	      .on('uncheck.bs.table', function(e, row) {
+	        $result.text('Event: uncheck.bs.table');
+	      })
+	      .on('check-all.bs.table', function(e) {
+	        $result.text('Event: check-all.bs.table');
+	        var check = $("checkbox");
+	        console.info(check);
+	      })
+	      .on('uncheck-all.bs.table', function(e) {
+	        $result.text('Event: uncheck-all.bs.table');
+	      })
+	      .on('load-success.bs.table', function(e, data) {
+	        $result.text('Event: load-success.bs.table');
+	      })
+	      .on('load-error.bs.table', function(e, status) {
+	        $result.text('Event: load-error.bs.table');
+	      })
+	      .on('column-switch.bs.table', function(e, field, checked) {
+	        $result.text('Event: column-switch.bs.table');
+	      })
+	      .on('page-change.bs.table', function(e, size, number) {
+	        $result.text('Event: page-change.bs.table');
+	      })
+	      .on('search.bs.table', function(e, text) {
+	        $result.text('Event: search.bs.table');
+	      });*/
+	  $("#infoform").submit(function(ev){ev.preventDefault();});
+}
+
+
+ProductObj.submit = function(){
+	//获取表单对象
+	var bootstrapValidator = $("#infoform").data('bootstrapValidator');
+	//手动触发验证
+	bootstrapValidator.validate();
+	if(bootstrapValidator.isValid()){
+		var pid = $("#pid").val(); 
+		var pname = $("#pname").val();
+		var pcategory = $("li[class=selected]").children().attr("data-tokens");
+		console.log(pcategory);
+		var price = $("#price").val();
+		var punit = $("#punit").val();
+		var origin = $("#origin").val();
+		var inventory = $("#inventory").val();
+		var pimg = $("#pimg").val();
+		var createtime = $("#createtime").val();
+		var state = $("#state").val();
+		
+		uploader.options.formData.pid = pid;
+		uploader.options.formData.pname = pname;
+		uploader.options.formData.pcategory = pcategory;
+		uploader.options.formData.price = price;
+		uploader.options.formData.punit = punit;
+		uploader.options.formData.origin = origin;
+		uploader.options.formData.inventory = inventory;
+		uploader.options.formData.pimg = pimg;
+		uploader.options.formData.createtime = createtime;
+		uploader.options.formData.state = state;
+		uploader.options.formData.index = index;  // 添加 || 编辑
+		uploader.upload(); //执行手动图片提交
+	}else{
+		return;
+	}
+}
 
 ProductObj.initUpload = function(){
 	var $ = jQuery,
@@ -30,6 +217,8 @@ ProductObj.initUpload = function(){
         fileNumLimit:'1',  //文件总数量只能选择1个 
         fileSingleSizeLimit: 2 * 1024* 1024,    // 2 M
         resize : false,// 不压缩image, 默认如果是jpeg，文件上传前会压缩一把再上传！
+        disableGlobalDnd: true,		//取消图片拖拽进网页为打开图片
+        dnd: '#dndArea',	//拖拽图片,配合disableGlobalDnd:true
 		// 只允许选择图片文件。 
 		accept: { 
 			title: 'Images', 
@@ -63,8 +252,59 @@ ProductObj.initUpload = function(){
 
 	});
 	
+	//开始上传时
+	uploader.on( 'startUpload', function( file ) {
+		//对没有选择图片的情况处理	新增必须选择图片,编辑不限制
+		if(index == 0){
+			if(file == null || typeof(file) == "undefined"){
+	    		swal({
+	                title: "请选择图片",
+	                text: "请选择图片",
+	                type: "error"
+	            }, function () {
+	            	return;
+	            });
+	    	}
+		} else if(index == 1 && (file == null || typeof(file) == "undefined")){
+			var pid = $("#pid").val(); 
+			var pname = $("#pname").val();
+			var pcategory = $("li[class=selected]").children().attr("data-tokens");
+			var price = $("#price").val();
+			var punit = $("#punit").val();
+			var origin = $("#origin").val();
+			var inventory = $("#inventory").val();
+			var pimg = $("#pimg").val();
+			var createtime = $("#createtime").val();
+			var state = $("#state").val();
+			$.post('../product/insertProduct',{
+				'pid':pid,
+				'pname':pname,
+				'pcategory':pcategory,
+				'price':price,
+				'punit':punit,
+				'origin':origin,
+				'inventory':inventory,
+				'pimg':pimg,
+				'createtime':createtime,
+				'state':state
+			}, function(data, status){
+				swal({
+	                title: "保存成功!",
+	                text: "成功保存  "+data.pname,
+	                type: "success"
+	            }, function () {
+	            	$("#myModal").modal("hide");
+	            	ProductObj.reloadTable();
+	            	window.location.reload();
+	            });
+			},'json');
+		}
+	});
+	
 	// 当有文件添加进来的时候，创建img显示缩略图使用
     uploader.on( 'fileQueued', function( file ) {
+    	
+    	
         var $li = $(
             '<div id="' + file.id + '" class="file-item thumbnail">' +
                 '<img>' +
@@ -108,7 +348,19 @@ ProductObj.initUpload = function(){
     uploader.on( 'uploadSuccess', function( file,response) {
 	    $( '#'+file.id ).addClass('upload-state-done');
 	    //console.info(response);
-	    $("#upInfo").html("<font color='red'>"+response._raw+"</font>");
+	    $("#upInfo").html("<font color='red'>"+/*response._raw*/ "上传成功" +"</font>");
+	    
+	    if(response != null){
+	    	swal({
+                title: "保存成功!",
+                text: "成功保存  "+response.pname,
+                type: "success"
+            }, function () {
+            	$("#myModal").modal("hide");
+            	ProductObj.reloadTable();
+            	window.location.reload();
+            });
+	    }
     });
 
     // 文件上传失败                                file:文件对象 ， code：出错代码
@@ -238,270 +490,62 @@ ProductObj.bootstrapValidator = function(){
 	});
 }
 
-ProductObj.reloadTable = function(){
-	  $('#exampleTableEvents').bootstrapTable({
-	      url: "../product/findProductByPage",
-	      search: true,
-	      striped: true,
-	      height: "600",
-		  clickToSelect: true,
-	      pagination: true,
-	      showRefresh: true,
-	      showToggle: true,
-	      showColumns: true,
-	      sortable: true,
-	      pageSize: 10,
-	   	  pageList: [10, 20, 30],
-	      iconSize: 'outline',
-	      toolbar: '#exampleTableEventsToolbar',
-	      icons: {
-	        refresh: 'glyphicon-repeat',
-	        toggle: 'glyphicon-list-alt',
-	        columns: 'glyphicon-list'
-	      },
-	      queryParamsType:'', //默认值为 'limit' ,在默认情况下 传给服务端的参数为：offset,limit,sort
-	      					  // 设置为 ''  在这种情况下传给服务器的参数为：pageSize,pageNumber
-	      sidePagination: "server",  //分页方式：client客户端分页，server服务端分页（*）
-	      //queryParams: queryParams,//前端调用服务时，会默认传递上边提到的参数，如果需要添加自定义参数，可以自定义一个函数返回请求参数
-	      columns: [{
-	          checkbox: true
-	      }, {
-	          field: 'pname',
-	          title: '产品名字',
-	          /*visible : false,*/
-	          searchable: true
-	      }, {
-	          field: 'pcategory',
-	          title: '产品类别编号',
-	          searchable: false,
-	          visible : false
-	      }, {
-	          field: 'pcategoryName',
-	          title: '产品类别',
-	          searchable: true
-	      },{
-	          field: 'price',
-	          title: '单价',
-	          searchable: true
-	      }, {
-	          field: 'punit',
-	          title: '单位',
-	          searchable: false
-	      }, {
-	          field: 'origin',
-	          title: '产地',
-	          searchable: false
-	      }, {
-	          field: 'pimg',
-	          title: '图片',
-		      formatter: function(value,row,index){
-	            return '<img  src="'+value+'" />';
-		      }
-	      }, { 
-	          field: 'inventory',
-	          title: '库存数',
-	          searchable: false
-	      }]
-	    });
-
-	    
-	    /*var $result = $('#examplebtTableEventsResult');
-	    var check = $("checkbox");
-
-	    $('#exampleTableEvents').on('all.bs.table', function(e, name, args) {
-	        console.log('Event:', name, ', data:', args);
-	      })
-	      .on('click-row.bs.table', function(e, row, $element) {
-	        $result.text('Event: click-row.bs.table');
-	      })
-	      .on('dbl-click-row.bs.table', function(e, row, $element) {
-	        $result.text('Event: dbl-click-row.bs.table');
-	      })
-	      .on('sort.bs.table', function(e, name, order) {
-	        $result.text('Event: sort.bs.table');
-	      })
-	      .on('check.bs.table', function(e, row) {
-	        $result.text('Event: check.bs.table');
-	      })
-	      .on('uncheck.bs.table', function(e, row) {
-	        $result.text('Event: uncheck.bs.table');
-	      })
-	      .on('check-all.bs.table', function(e) {
-	        $result.text('Event: check-all.bs.table');
-	        var check = $("checkbox");
-	        console.info(check);
-	      })
-	      .on('uncheck-all.bs.table', function(e) {
-	        $result.text('Event: uncheck-all.bs.table');
-	      })
-	      .on('load-success.bs.table', function(e, data) {
-	        $result.text('Event: load-success.bs.table');
-	      })
-	      .on('load-error.bs.table', function(e, status) {
-	        $result.text('Event: load-error.bs.table');
-	      })
-	      .on('column-switch.bs.table', function(e, field, checked) {
-	        $result.text('Event: column-switch.bs.table');
-	      })
-	      .on('page-change.bs.table', function(e, size, number) {
-	        $result.text('Event: page-change.bs.table');
-	      })
-	      .on('search.bs.table', function(e, text) {
-	        $result.text('Event: search.bs.table');
-	      });*/
-	  $("#infoform").submit(function(ev){ev.preventDefault();});
-  }
-
-
-ProductObj.submit = function(index){
-	//获取表单对象
-	var bootstrapValidator = $("#infoform").data('bootstrapValidator');
-	//手动触发验证
-	bootstrapValidator.validate();
-	if(bootstrapValidator.isValid()){
-	//表单提交的方法、比如ajax提交
-		var id = $("#id").val(); 
-		var pname = $("#pname").val();
-		var pcategory = $(".selected").children().attr("data-tokens");
-		var price = $("#price").val();
-		var punit = $("#punit").val();
-		var origin = $("#origin").val();
-		var inventory = $("#inventory").val();
-		var createtime = $("#createtime").val();
-		var state = $("#state").val();
-		var url = "";
-		if(index == 0){
-			url = "../product/insertProduct";
-		}else if (index == 1){
-			
-		}
-		$.ajax({
-			type:"POST",
-			url:url,
-			async:true,
-			dataType:'json',
-			data: {
-				'id':id,
-				'pname':pname,
-				'pcategory':pcategory,
-				'price':price,
-				'punit':punit,
-				'origin':origin,
-				'inventory':inventory,
-				'createtime':createtime,
-				'state':state
-			},
-			success:function(data){
-				if(data != null){
-					console.info(data);
-					// 初始化以后添加  
-					uploader.options.formData.pid = data.pid;
-					uploader.upload(); //执行手动图片提交
-					swal({
-	                    title: "保存成功!",
-	                    text: "成功保存"+data.pname,
-	                    type: "success"
-	                }, function () {
-	                	$("#myModal").modal("hide");
-	                	ProductObj.reloadTable();
-	                	window.location.reload();
-	                });
-				}
-			},
-			error:function(){
-				alert("出错误!!");
-			}
-		});
-		
-		//***************uploader.upload();   //执行手动提交
-		
-		/*if($(".modal-title").html()=="修改产品信息"){
-			index = 1;
-			url = "../sysAdmin/updateAdmin";
-		}else{
-			url = "../sysAdmin/insertAdmin";
-		}
-		$.ajax({
-			type:"POST",
-			url:url,
-			async:true,
-			dataType:'text',
-			data: {
-				'id':id,
-				'pname':pname,
-				'price':price,
-				'punit':punit,
-				'origin':origin,
-				'inventory':inventory,
-				'createtime':createtime,
-				'state':state
-			},
-			success:function(data){
-				console.info(data);
-				if(data == null || data == ""){
-					if(index == 1){
-						alert("修改失败!");
-					}else{
-						alert("已存在用户名!");
-					}
-				}else if(data == "Successful"){
-					$(".btn-white").click();
-					if(index == 1){
-						alert("修改成功!");
-						reloadTable();
-					}else{
-						alert("添加成功!");
-						reloadTable();
-					}
-					window.location.reload();
-				}
-			},
-			error:function(){
-				alert("错误!");
-			}
-		});*/
-		//$("#infoform").submit();
-	}else{
-		return;
-	}
-}
-
 ProductObj.initEvents = function(){
 	//提交表单
 	$(".btn-primary").bind("click", function(){
-		ProductObj.submit(0);
+		ProductObj.submit();
 	});
 	
 	//修改信息
 	$("#editbtn").bind("click",function(){
-		ProductObj.submit(1);
+		if(selectcount > 1){
+			swal({
+                title: "请选择一条产品项!",
+                text: "请选择一条产品项",
+                type: "error"
+            }, function () {
+            	return;
+            });
+		}else if(selectcount == 0){
+			swal({
+                title: "请选择产品项!!",
+                text: "请选择管产品项!",
+                type: "error"
+            }, function () {
+            	return;
+            });
+		}else{
+			$("#myModal").modal("show");
+			$(".modal-title").html("修改产品信息");
+			index = 1;
+			console.log(cArr[0]);
+			$("#pid").val(cArr[0].pid);
+			$("#pname").val(cArr[0].pname);
+			$("#price").val(cArr[0].price);
+			$("#punit").val(cArr[0].punit);
+			$("#origin").val(cArr[0].origin);
+			$("#inventory").val(cArr[0].inventory);
+			$("#pimg").val(cArr[0].pimg);
+			$("#createtime").val(cArr[0].createtime);
+			$("#state").val(cArr[0].state);
+		}
 	});
 	
 	//关闭模态框
 	$('#myModal').on('hide.bs.modal', function () {
+		$('#infoform').data('bootstrapValidator').resetForm(true);
 	    uploader.destroy();
 	});
 	
 	//显示模态框
 	$('#myModal').on('shown.bs.modal', function () {
-        
-    });
-    
-	
-	//添加信息
-	$("#insertbtn").bind("click",function(){
-		index = 0;
-		$("#myModal").modal("show");
-		$('#infoform').data('bootstrapValidator').resetForm(true);
 		// 当domReady的时候开始初始化
         ProductObj.initUpload();
-		/*$("#loginname").removeAttr("readOnly");
-		$("#id").val();
-		$("#createtime").val();
-		$("#roletype").val();
-		$("#state").val();*/
-		
-		$(".modal-title").html("添加新产品");
+        $('#infoform').data('bootstrapValidator').resetForm(true);
+    });
+	
+	//显示模态框之前
+	$('#myModal').on('show.bs.modal', function () {
 		$.ajax({
 			type:'post',
 			url:'../category/findAllCategoryEntity',
@@ -520,17 +564,78 @@ ProductObj.initEvents = function(){
 					html+="</optgroup>";
 				});
 				$("#pcategory").append(html);
-				 //更新内容刷新到相应的位置
+				 
+				if(index == 1){
+					if(cArr[0].pcategoryName != null && cArr[0].pcategoryName != "" && typeof(cArr[0].pcategoryName) != "undefined"){
+						$('#pcategory').val(cArr[0].pcategoryName);		//设置默认值
+					}
+				}
+				//更新内容刷新到相应的位置
 				$('#pcategory').selectpicker('render');
                 $('#pcategory').selectpicker('refresh');
 			}
 		});
+    });
+	
+	//删除消息
+	$("#delbtn").bind("click",function(){
+		if(cArr.length == 0){
+			swal({
+                title: "请选择至少一条产品项!",
+                text: "请选择至少一条产品项",
+                type: "error"
+            }, function () {
+            	return;
+            });
+		}else{
+			swal({
+                title: "您确定要删除选中的信息吗",
+                text: "请谨慎操作！",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "删除！",
+                cancelButtonText: "取消",
+                closeOnConfirm: false,
+                closeOnCancel: false
+            },
+            function (isConfirm) {
+                if (isConfirm) {
+                	var pIds = [];
+                	$.each(cArr,function(i,o){
+                		pIds.push(o.pid);
+                	});
+                	$.post('../product/delProduct',{
+						'pIds' : pIds
+					},function(data,status){
+						if(data == "success"){
+							swal({
+			                    title: "删除成功！",
+			                    text: "您已经删除了选中的产品信息",
+			                    type: "success"
+			                }, function () {
+			                	window.location.reload();
+			                });
+							//swal("删除成功！", "您已经删除了选中的员工信息。", "success");
+						}else{
+							swal("删除失败", " :) ", "error");
+						}
+					});
+                } else {
+                    swal("已取消", "您取消了删除操作！", "error");
+                }
+            });
+			
+		} 
+	});
+    
+	//添加信息
+	$("#insertbtn").bind("click",function(){
+		$("#myModal").modal("show");
+		$(".modal-title").html("添加新产品");
+		index = 0;
 	});
 	
-	//取消按钮
-	$('.btn-white').click(function() {
-		$('#infoform').data('bootstrapValidator').resetForm(true);
-    });
 }
 
 function getCategoryRootId(cList){
