@@ -86,7 +86,7 @@
 							<ul class="nav nav-second-level">
 
 								<li>
-									<a class="J_menuItem" href="typography.html">未完成订单</a>
+									<a class="J_menuItem" href="${ctx }/orders/main">未完成订单</a>
 								</li>
 								<li>
 									<a class="J_menuItem" href="typography.html">已完成订单</a>
@@ -164,7 +164,7 @@
 					</nav>
 				</div>
 				<div class="row J_mainContent" id="content-main">
-					<iframe id="J_iframe" width="100%" height="100%" src="${ctx }/product/main" frameborder="0" data-id="index_v1.html" seamless></iframe>
+					<iframe id="J_iframe" width="100%" height="100%" src="${ctx }/orders/main" frameborder="0" data-id="index_v1.html" seamless></iframe>
 				</div>
 			</div>
 			<!--右侧部分结束-->

@@ -43,6 +43,11 @@ public class ProductController {
 		return "admin/product";
 	}
 	
+	@RequestMapping("/productList")
+	public String productList(){
+		return "admin/productList";
+	}
+	
 	@RequestMapping("/test")
 	public String typetest(){
 		return "admin/test";

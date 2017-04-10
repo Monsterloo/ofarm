@@ -164,7 +164,6 @@ ProductObj.reloadTable = function(){
 	  $("#infoform").submit(function(ev){ev.preventDefault();});
 }
 
-
 ProductObj.submit = function(){
 	//获取表单对象
 	var bootstrapValidator = $("#infoform").data('bootstrapValidator');
@@ -199,6 +198,7 @@ ProductObj.submit = function(){
 		return;
 	}
 }
+
 
 ProductObj.initUpload = function(){
 	var $ = jQuery,
@@ -386,6 +386,7 @@ ProductObj.initUpload = function(){
 
 }
 
+
 ProductObj.bootstrapValidator = function(){
 	$("#infoform").bootstrapValidator({
 		feedbackIcons: {
@@ -489,6 +490,7 @@ ProductObj.bootstrapValidator = function(){
         
 	});
 }
+
 
 ProductObj.initEvents = function(){
 	//提交表单
@@ -638,6 +640,7 @@ ProductObj.initEvents = function(){
 	
 }
 
+
 function getCategoryRootId(cList){
 	nodeArr = [];
 	$.each(cList,function(i,o){
@@ -647,6 +650,7 @@ function getCategoryRootId(cList){
 	});
 }
 
+
 function getCategoryNode(id,cList){
 	sonnodeArr = [];
 	$.each(cList,function(i,o){
@@ -655,6 +659,7 @@ function getCategoryNode(id,cList){
 		}
 	});
 }
+
 
 function queryParams(params) {
   return {
