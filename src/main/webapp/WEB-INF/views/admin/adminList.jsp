@@ -383,24 +383,51 @@
 								console.info(data);
 								if(data == null || data == ""){
 									if(index == 1){
-										alert("修改失败!");
+										swal({
+							                title: "修改失败!",
+							                text: "修改失败!",
+							                type: "error"
+							            }, function () {
+							            	return;
+							            });
 									}else{
-										alert("已存在用户名!");
+										swal({
+							                title: "该用户名已存在!",
+							                text: "该用户名已存在!",
+							                type: "error"
+							            }, function () {
+							            	return;
+							            });
 									}
 								}else if(data == "Successful"){
 									$(".btn-white").click();
 									if(index == 1){
-										alert("修改成功!");
-										reloadTable();
+										swal({
+							                title: "修改成功!",
+							                type: "success"
+							            }, function () {
+							            	reloadTable();
+							            	window.location.reload();
+							            });
 									}else{
-										alert("添加成功!");
-										reloadTable();
+										swal({
+							                title: "添加成功!",
+							                type: "success"
+							            }, function () {
+							            	reloadTable();
+							            	window.location.reload();
+							            });
 									}
-									window.location.reload();
 								}
 							},
 							error:function(){
-								alert("错误!");
+								swal({
+					                title: "错误!",
+					                text: "错误!",
+					                type: "error"
+					            }, function () {
+					            	return;
+					            });
 							}
 						});
 						//$("#infoform").submit();
@@ -420,16 +447,13 @@
 				
 				
 				//表格事件
-				var selectcount = $(".selected").length;
 				var adminIds = new Array();
 				$('#exampleTableEvents').on('all.bs.table', function(e, name, args) {
 					console.log('Event:', name, ', data:', args);
 				}).on('check.bs.table', function(e, row) {
 					adminIds.push(row.id);
 					console.info(adminIds);
-			        selectcount = $(".selected").length;
 			   	}).on('uncheck.bs.table', function(e, row) {
-			        selectcount = $(".selected").length;
 			        adminIds.splice($.inArray(row.id),1);
 			        console.info(adminIds);
 			    })
@@ -470,8 +494,13 @@
 				//删除消息
 				$("#delbtn").bind("click",function(){
 					if(adminIds.length == 0){
-						alert("请至少选择一条管理员项!");
-						return;
+						swal({
+				              title: "请至少选择一条管理员项!",
+				              text: "请至少选择一条管理员项!",
+				              type: "error"
+				          }, function () {
+				          	return;
+				        });
 					}else{
 						swal({
 	                        title: "您确定要删除选中的信息吗",
@@ -512,12 +541,22 @@
 				
 				//修改信息
 				$("#editbtn").bind("click",function(){
-					if(selectcount > 1){
-						alert("请选择一条管理员项!");
-						return;
-					}else if(selectcount == 0){
-						alert("请选择管理员项!");
-						return;
+					if(adminIds.length > 1){
+						swal({
+				              title: "请选择一条管理员项!",
+				              text: "请选择一条管理员项!",
+				              type: "error"
+				          }, function () {
+				          	return;
+				        });
+					}else if(adminIds.length == 0){
+						swal({
+				              title: "请选择管理员项!",
+				              text: "请选择管理员项!",
+				              type: "error"
+				          }, function () {
+				          	return;
+				        });
 					}else{
 						$("#myModal").modal("show");
 						$("#loginname").attr("readOnly",true);
@@ -542,7 +581,7 @@
 								$("#state").val(data.state);
 							},
 							error:function(){
-								alert("获取数据错误!");
+								swal("获取数据错误!", " :) ", "error");
 							}
 						});
 					}

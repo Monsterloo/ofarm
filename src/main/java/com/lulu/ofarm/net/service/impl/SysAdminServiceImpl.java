@@ -64,6 +64,12 @@ public class SysAdminServiceImpl implements SysAdminService {
 	}
 	
 	@Override
+	public SysAdmin findById(String id) {
+		SysAdmin admin = sysAdminDao.findOne(id);
+		return admin;
+	}
+	
+	@Override
 	public void delAdminById(List<String> idList) {
 		for(String id : idList){
 			sysAdminDao.delete(id);

@@ -2,17 +2,17 @@ var OrdersObj = {};
 var oArr = new Array();
 var selectcount = oArr.length;
 var product;
+var data_index = 0;
 
 jQuery(function() {
 	OrdersObj.reloadTable();
 	OrdersObj.initEvents();
-	OrdersObj.bootstrapValidator();});
-
-
+	OrdersObj.bootstrapValidator();
+});
 
 OrdersObj.reloadTable = function(){
 	  $('#exampleTableEvents').bootstrapTable({
-	      url: "../product/findProductByPage",
+	      url: "../orders/findOrdersByPage",
 	      search: true,
 	      striped: true,
 	      height: "600",
@@ -63,7 +63,7 @@ OrdersObj.reloadTable = function(){
 	          title: '客户联系号码',
 	          searchable: false
 	      }, {
-	          field: 'creattime',
+	          field: 'createtime',
 	          title: '创建时间',
 	          searchable: false
 	      }, {
@@ -74,7 +74,7 @@ OrdersObj.reloadTable = function(){
 	    });
 
 	  $('#exampleTableEvents').on('all.bs.table', function(e, name, args) {
-			console.log('Event:', name, ', data:', args);
+			//console.log('Event:', name, ', data:', args);
 		}).on('check.bs.table', function(e, row) {
 			oArr.push(row);
 			console.info(oArr);
@@ -199,11 +199,86 @@ OrdersObj.bootstrapValidator = function(){
 	});
 }
 
+OrdersObj.submit = function(){
+	//获取表单对象
+	var bootstrapValidator = $("#infoform").data('bootstrapValidator');
+	//手动触发验证
+	//bootstrapValidator.validate();
+	//if(bootstrapValidator.isValid()){
+		var $area = $("#productArea");
+		var $trs = $area.find("tr");
+		var detailArr = [];
+		var detail = "";
+		var submit = true;
+		
+		$.each($trs,function(i, o){
+			var pid = $(o).attr("p-id");
+			var number = $(o).children().eq(2).children().val();
+			if(!isNumber(number)){
+				submit = false;
+				swal({
+		              title: "数量列请输入正确的整数",
+		              text: "请输入正确格式的整数",
+		              type: "error"
+		          }, function () {
+		          	return;
+		        });
+			}
+			detail = pid+"#"+number;
+			detailArr.push(detail);
+		});
+		
+		if(submit == true){
+			console.info(detailArr);
+			var customername = $("#customername").val();
+			var customeraddress = $("#customeraddress").val();
+			var customerphone = $("#customerphone").val();
+			var note = $("#note").val();
+			$.post('../orders/insertOrder',{
+				'customername':customername,
+				'customeraddress':customeraddress,
+				'customerphone':customerphone,
+				'note':note,
+				'detailArr':detailArr
+			}, function(data,status){
+				if(data.state == "1"){
+					swal({
+		                title: "保存成功!",
+		                text: "成功保存 生成订单  "+data.oid,
+		                type: "success"
+		            }, function () {
+		            	$("#myModal").modal("hide");
+		            	OrdersObj.reloadTable();
+		            	window.location.reload();
+		            });
+				} else if(data.state == "-1"){
+					swal({
+		                title: "保存失败!",
+		                text: data.note,
+		                type: "error"
+		            }, function () {
+		            	return;
+		            });
+				}
+			}, 'json');
+		}
+	//}
+}
+
 OrdersObj.initEvents = function(){
 	//添加订单
 	$("#saveOrder").bind("click", function(){
-		/*ProductObj.submit();*/
-		alert("提交了");
+		OrdersObj.submit();
+	});
+	
+	//移除产品项
+	$("#productArea").delegate("button","click",function(e){
+		var $tr = $(this).parent().parent();
+		$tr.remove();
+		if($("#productArea").find("tr").length < 1){
+			$noRecords = $('<tr class="no-records-found"><td colspan="4">没有找到匹配记录</td></tr>');
+			$("#productArea").append($noRecords);
+		}
 	});
 	
 	//添加产品
@@ -217,15 +292,37 @@ OrdersObj.initEvents = function(){
 	          	return;
 	        });
 		}else{
-			console.log(product);
-			var $area = $("#productArea");
-			$tr = $('<tr p-id="'+product.pid+'">'+
-				'<td>'+product.pcategoryName+'</td>' +
-				'<td>'+product.price+'</td>' +
-				'<td><input type="text" name="pnumber" placeholder="请输入数量"/></td>' +
-				'<td><button class="btn btn-danger btn-circle" type="button"><i class="fa fa-times"></i></button></td>'+
-			+'</tr>');
-			////lulu
+			var trs = $("#productArea").find("tr");
+			var pIds = [];
+			var add = true;
+			$.each(trs,function(i, o){
+				pIds.push($(o).attr("p-id"));
+			});
+			$.each(pIds, function(i, id){
+				if(product.pid == id){
+					add = false;
+					swal({
+			              title: "本订单已经添加了该产品!",
+			              text: "本订单已经添加了该产品",
+			              type: "error"
+			          }, function () {
+			          	return false;
+			          });
+				}	
+			});
+			if(add == true){
+				var $area = $("#productArea");
+				$tr = $('<tr data-index='+data_index+' p-id="'+product.pid+'">'+
+					'<td>'+product.pname+'</td>' +
+					'<td>'+product.price+'</td>' +
+					'<td><input type="text" name="pnumber" placeholder="请输入数量" /></td>' +
+					'<td><button class="btn btn-danger btn-circle" type="button"><i class="fa fa-times"></i></button></td>'+
+				+'</tr>');
+				data_index++;
+				$("#pModal").modal("hide");
+				$area.prepend($tr);
+				$(".no-records-found").remove();
+			}
 		}
 	});
 	
@@ -414,4 +511,10 @@ OrdersObj.initEvents = function(){
 	});
   
 	
+}
+
+
+function isNumber(number){
+	var reg = new RegExp("^([0-9]|[1-9][0-9]+)$","g");
+	return reg.test(number);
 }

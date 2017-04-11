@@ -236,16 +236,31 @@
 			function beforeDrop(treeId, treeNodes, targetNode, moveType, isCopy) {
 				className = (className === "dark" ? "":"dark");
 				if(treeNodes[0].pId == 0 || treeNodes[0].pId == null){
-					alert("不能改变根类别结构!");
-					return false;
+					swal({
+		                title: "不能改变根类别结构!",
+		                text: "不能改变根类别结构!",
+		                type: "error"
+		            }, function () {
+		            	return false;
+		            });
 				}else {
 					if(targetNode == null){
-						alert("不能增加根类别!");
-						return false;
+						swal({
+			                title: "不能增加根类别!",
+			                text: "不能增加根类别!",
+			                type: "error"
+			            }, function () {
+			            	return false;
+			            });
 					}else{
 						if(targetNode.pId == 0 || targetNode.pId == null && (moveType == "prev" || moveType == "next")){
-							alert("不能增加根类别!");
-							return false;
+							swal({
+				                title: "不能增加根类别!",
+				                text: "不能增加根类别!",
+				                type: "error"
+				            }, function () {
+				            	return false;
+				            });
 						}
 					}
 				}
@@ -256,16 +271,31 @@
 			function beforeDrop(treeId, treeNodes, targetNode, moveType, isCopy) {
 				className = (className === "dark" ? "":"dark");
 				if(treeNodes[0].pId == 0 || treeNodes[0].pId == null){
-					alert("不能改变根类别结构!");
-					return false;
+					swal({
+		                title: "不能改变根类别结构!",
+		                text: "不能改变根类别结构!",
+		                type: "error"
+		            }, function () {
+		            	return false;
+		            });
 				}else {
 					if(targetNode == null){
-						alert("不能增加根类别!");
-						return false;
+						swal({
+			                title: "不能增加根类别!",
+			                text: "不能增加根类别!",
+			                type: "error"
+			            }, function () {
+			            	return false;
+			            });
 					}else{
 						if(targetNode.pId == 0 || targetNode.pId == null && (moveType == "prev" || moveType == "next")){
-							alert("不能增加根类别!");
-							return false;
+							swal({
+				                title: "不能增加根类别!",
+				                text: "不能增加根类别!",
+				                type: "error"
+				            }, function () {
+				            	return false;
+				            });
 						}
 					}
 				}
@@ -311,6 +341,27 @@
 				}else{
 					return false;
 				}
+				/* swal({
+		              title: "确定删除 '" + treeNode.name + "' 类别及其子类别吗?",
+		              text: "请谨慎操作！",
+		              type: "warning",
+		              showCancelButton: true,
+		              confirmButtonColor: "#DD6B55",
+		              confirmButtonText: "删除！",
+		              cancelButtonText: "取消",
+		              closeOnConfirm: false,
+		              closeOnCancel: false
+		          },
+		          function (isConfirm) {
+		              if (isConfirm) {
+		            	  swal("删除成功!", " :) ", "success");
+		            	  return;
+		              } else {
+		                  swal("已取消", "您取消了删除操作！", "error");
+		                  return false;
+		              }
+		          }); */
+				
 			}
 
 			//验证编辑
@@ -321,7 +372,11 @@
 					setTimeout(function() {
 						var zTree = $.fn.zTree.getZTreeObj("treeDemo");
 						zTree.cancelEditName();
-						alert("类别名字不能为空!");
+						swal({
+			                title: "类别名字不能为空!",
+			                type: "error"
+			            }, function () {
+			            });
 					}, 0);
 					return false;
 				}
@@ -432,10 +487,19 @@
 						data: JSON.stringify(nodes),
 						success: function(data,status){
 							if(data == "success"){
-								alert("保存类别树成功!");
-								reloadTree();
+								swal({
+					                title: "保存成功!",
+					                type: "success"
+					            }, function () {
+					            	reloadTree();
+					            });
 							}else{
-								alert("保存失败!");
+								swal({
+					                title: "保存失败!",
+					                type: "error"
+					            }, function () {
+					            	return;
+					            });
 							}
 						}
 					});

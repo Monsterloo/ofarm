@@ -11,7 +11,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,7 +24,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.lulu.ofarm.net.entity.Product;
-import com.lulu.ofarm.net.entity.SysAdmin;
 import com.lulu.ofarm.net.service.ProductService;
 import com.lulu.ofarm.net.util.IOUtils;
 import com.lulu.ofarm.net.webmodel.PageResultForBootstrap;

@@ -95,7 +95,7 @@
 							<div class="form-group"><label>客户收货地址</label>
 								<input type="text" id="customeraddress" name="customeraddress" placeholder="客户收货地址" class="form-control"></div>
 							<div class="form-group"><label>客户联系号码</label>
-								<input type="text" id="customerphone" name="puncustomerphoneit" placeholder="请输入客户联系号码" class="form-control"></div>
+								<input type="text" id="customerphone" name="customerphone" placeholder="请输入客户联系号码" class="form-control"></div>
 							<div class="form-group"><label>备注</label>
 								<input type="text" id="note" name="note" placeholder="备注" class="form-control"></div>
 							<div class="form-group"><label>产品</label>
@@ -108,42 +108,24 @@
 			                                        <tr>
 			                                            <th data-field="name">产品名称</th>
 			                                            <th data-field="price">单价</th>
-			                                            <th data-field="column1">数量</th>
+			                                            <th data-field="number">数量</th>
 			                                            <th data-field="state">删除</th>
 			                                        </tr>
 			                                     </thead>
 			                                        <tbody id="productArea">
-			                                        	<tr>
+			                                        	<!-- <tr p-id="2c90b5a75b3bd87a015b3bd887200004">
 			                                        		<td>32</td>
 				                                        	<td>32</td>
 				                                        	<td><input type="text" /></td>
 				                                        	<td><button class="btn btn-danger btn-circle" type="button"><i class="fa fa-times"></i></button></td>
 			                                        	</tr>
-			                                        	<tr>
+			                                        	<tr p-id="2c90b5a75b3bd87a015b3bd887200005">
 			                                        		<td>32</td>
-				                                        	<td>32</td>
+				                                        	<td>3233</td>
 				                                        	<td><input type="text" /></td>
 				                                        	<td><button class="btn btn-danger btn-circle" type="button"><i class="fa fa-times"></i></button></td>
-			                                        	</tr>
-			                                        	<tr>
-			                                        		<td>32</td>
-				                                        	<td>32</td>
-				                                        	<td><input type="text" /></td>
-				                                        	<td><button class="btn btn-danger btn-circle" type="button"><i class="fa fa-times"></i></button></td>
-			                                        	</tr>
-			                                        	<tr>
-			                                        		<td>32</td>
-				                                        	<td>32</td>
-				                                        	<td><input type="text" /></td>
-				                                        	<td><button class="btn btn-danger btn-circle" type="button"><i class="fa fa-times"></i></button></td>
-			                                        	</tr>
-			                                        	<tr>
-			                                        		<td>32</td>
-				                                        	<td>32</td>
-				                                        	<td><input type="text" /></td>
-				                                        	<td><button class="btn btn-danger btn-circle" type="button"><i class="fa fa-times"></i></button></td>
-			                                        	</tr>
-			                                        </tbody>
+			                                        	</tr> -->
+			                                     </tbody>
                                 			</table>
 										</div>
 									</div>

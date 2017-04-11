@@ -13,6 +13,8 @@ public interface SysAdminService {
 	
 	public SysAdmin findByLoginname(String loginname);
 	
+	public SysAdmin findById(String id);
+	
 	public String getTotalCount();
 	
 	public int getPage(int pageSize, int pageNumber);

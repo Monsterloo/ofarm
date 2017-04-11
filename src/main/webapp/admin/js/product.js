@@ -199,7 +199,6 @@ ProductObj.submit = function(){
 	}
 }
 
-
 ProductObj.initUpload = function(){
 	var $ = jQuery,
 	$list = $('#fileList'),
