@@ -17,4 +17,6 @@ public interface OrdersService {
 	public Page<Orders> findOrdersByPage(Pageable page);
 
 	public Orders save(OrdersBean bean, List<String> detailStr);
+	
+	public List<Orders> changeState(List<String> oIds, String index);
 }

@@ -1,6 +1,5 @@
 var OrdersObj = {};
 var oArr = new Array();
-var selectcount = oArr.length;
 var product;
 var data_index = 0;
 
@@ -78,11 +77,9 @@ OrdersObj.reloadTable = function(){
 		}).on('check.bs.table', function(e, row) {
 			oArr.push(row);
 			console.info(oArr);
-	        selectcount = oArr.length;
 	   	}).on('uncheck.bs.table', function(e, row) {
 	        oArr.splice($.inArray(row),1);
 	        console.info(oArr);
-	        selectcount = oArr.length;
 	    })
 		 //全选
 		 .on('check-all.bs.table', function(e,row) {
@@ -95,7 +92,6 @@ OrdersObj.reloadTable = function(){
 	        	oArr.push(obj);
 	        });
 			//console.info(oArr);
-			selectcount = oArr.length;
 		 })
 		 //取消全选
 		 .on('uncheck-all.bs.table', function(e,row) {
@@ -105,7 +101,6 @@ OrdersObj.reloadTable = function(){
 			$(selects).removeClass("selected");
 			oArr.splice(0,oArr.length);		//清除数组
 			//console.info(oArr);
-			selectcount = oArr.length;
 		 });
 	  
 	  
@@ -389,54 +384,7 @@ OrdersObj.initEvents = function(){
 	
 	//修改信息
 	$("#editbtn").bind("click",function(){
-		if(oArr.length == 0){
-			swal({
-              title: "请选择至少一条订单项!",
-              text: "请选择至少一条订单项",
-              type: "error"
-          }, function () {
-          	return;
-          });
-		}else{
-			swal({
-              title: "您确定要完成选中的订单吗",
-              text: "请谨慎操作！",
-              type: "success",
-              showCancelButton: true,
-              confirmButtonColor: "#DD6B55",
-              confirmButtonText: "完成！",
-              cancelButtonText: "取消",
-              closeOnConfirm: false,
-              closeOnCancel: false
-          },
-          function (isConfirm) {
-              if (isConfirm) {
-              	/*var pIds = [];
-              	$.each(cArr,function(i,o){
-              		pIds.push(o.pid);
-              	});
-              	$.post('../product/delProduct',{
-						'pIds' : pIds
-					},function(data,status){
-						if(data == "success"){
-							swal({
-			                    title: "删除成功！",
-			                    text: "您已经删除了选中的产品信息",
-			                    type: "success"
-			                }, function () {
-			                	window.location.reload();
-			                });
-							//swal("删除成功！", "您已经删除了选中的员工信息。", "success");
-						}else{
-							swal("删除失败", " :) ", "error");
-						}
-					});*/
-              } else {
-                  swal("已取消", "您取消了完成操作！", "error");
-              }
-          });
-			
-		} 
+		OrdersObj.changeState("finish");
 	});
 	
 	//关闭模态框
@@ -458,61 +406,102 @@ OrdersObj.initEvents = function(){
 	$('#myModal').on('show.bs.modal', function () {
 	});
 	
-	//删除消息
+	//取消订单
 	$("#delbtn").bind("click",function(){
-		if(oArr.length == 0){
-			swal({
-              title: "请选择至少一条订单项!",
-              text: "请选择至少一条订单项",
-              type: "error"
-          }, function () {
-          	return;
-          });
-		}else{
-			swal({
-              title: "您确定要取消选中的订单吗",
-              text: "请谨慎操作！",
-              type: "warning",
-              showCancelButton: true,
-              confirmButtonColor: "#DD6B55",
-              confirmButtonText: "取消！",
-              cancelButtonText: "返回",
-              closeOnConfirm: false,
-              closeOnCancel: false
-          },
-          function (isConfirm) {
-              if (isConfirm) {
-              	/*var pIds = [];
-              	$.each(cArr,function(i,o){
-              		pIds.push(o.pid);
-              	});
-              	$.post('../product/delProduct',{
-						'pIds' : pIds
-					},function(data,status){
-						if(data == "success"){
-							swal({
-			                    title: "删除成功！",
-			                    text: "您已经删除了选中的产品信息",
-			                    type: "success"
-			                }, function () {
-			                	window.location.reload();
-			                });
-							//swal("删除成功！", "您已经删除了选中的员工信息。", "success");
-						}else{
-							swal("删除失败", " :) ", "error");
-						}
-					});*/
-              } else {
-                  swal("已取消", "您取消了取消操作！", "error");
-              }
-          });
-			
-		} 
+		OrdersObj.changeState("cancel");
 	});
   
 	
 }
 
+OrdersObj.changeState = function(index){
+	if(oArr.length == 0){
+		swal({
+          title: "请选择至少一条订单项!",
+          text: "请选择至少一条订单项",
+          type: "error"
+      }, function () {
+      	return;
+      });
+	}else{
+		var confirm = "";
+		var back = "";
+		if(index == "finish"){
+			confirm = "完成";
+			back = "取消";
+		} else if(index == "cancel"){
+			confirm = "取消";
+			back = "返回";
+		}
+		
+		swal({
+          title: "您确定要"+confirm+"选中的订单吗",
+          text: "请谨慎操作！",
+          type: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#DD6B55",
+          confirmButtonText: back+"!",
+          cancelButtonText: "返回",
+          closeOnConfirm: false,
+          closeOnCancel: false
+      },
+      function (isConfirm) {
+          if (isConfirm) {
+          	var oIds = [];
+          	$.each(oArr,function(i,o){
+          		oIds.push(o.oid);
+          	});
+          	/*$.post('../orders/changeState',{
+					'oIds[]' : oIds,
+					'index' : index
+				},function(data,status){
+					if(data == "success"){
+						swal({
+		                    title: confirm+"成功！",
+		                    text: "您已经"+confirm+"了选中的订单",
+		                    type: "success"
+		                }, function () {
+		                	//OrdersObj.reloadTable();
+		                	window.location.reload();
+		                });
+						//swal("删除成功！", "您已经删除了选中的员工信息。", "success");
+					}else{
+						swal(confirm+"失败", " :) ", "error");
+					}
+				});*/
+          	$.ajax({
+          		url:'../orders/changeState',
+          		type : 'POST',
+          		async : true,
+          		data : {'oIds[]' : oIds,'index' : index},
+          		success:function(data, status){
+          			if(data == "success"){
+						swal({
+		                    title: confirm+"成功！",
+		                    text: "您已经"+confirm+"了选中的订单",
+		                    type: "success"
+		                }, function () {
+		                	//OrdersObj.reloadTable();
+		                	window.location.reload();
+		                });
+						//swal("删除成功！", "您已经删除了选中的员工信息。", "success");
+					}else{
+						swal(confirm+"失败", " :) ", "error");
+					}
+          		},
+          		error:function(XMLHttpRequest, textStatus, errorThrown){
+          			console.info(XMLHttpRequest);
+          			console.info(textStatus);
+          			console.info(errorThrown);
+          		}
+          	});
+          } else {
+              swal("已"+back, "您取消了"+confirm+"操作！", "error");
+          }
+      });
+		
+	} 
+}
 
 function isNumber(number){
 	var reg = new RegExp("^([0-9]|[1-9][0-9]+)$","g");

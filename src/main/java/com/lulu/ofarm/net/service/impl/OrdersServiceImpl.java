@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
@@ -121,6 +122,23 @@ public class OrdersServiceImpl implements OrdersService {
 		};
 		Page<Orders> pageObj = ordersDao.findAll(spec, page);
 		return pageObj;
+	}
+
+	@Override
+	public List<Orders> changeState(List<String> oIds, String index) {
+		StringBuffer sb = new StringBuffer();
+		if("finish".equals(index)){
+			sb.append("2");
+		} else if("cancel".equals(index)){
+			sb.append("0");
+		}
+		for(String oid : oIds){
+			Query query = entityManager.createNativeQuery(" update orders set state=:state where oid=:oid ");
+			query.setParameter("state", sb.toString());
+			query.setParameter("oid", oid);
+			query.executeUpdate();
+		}
+		return null;
 	}
 
 }

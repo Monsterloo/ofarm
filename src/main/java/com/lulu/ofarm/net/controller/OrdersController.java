@@ -11,18 +11,15 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.lulu.ofarm.net.entity.Orders;
-import com.lulu.ofarm.net.entity.Product;
 import com.lulu.ofarm.net.service.OrdersService;
 import com.lulu.ofarm.net.service.ProductService;
 import com.lulu.ofarm.net.webmodel.OrdersBean;
 import com.lulu.ofarm.net.webmodel.PageResultForBootstrap;
-import com.lulu.ofarm.net.webmodel.ProductBean;
 
 @Controller
 @RequestMapping("/orders")
@@ -39,12 +36,34 @@ public class OrdersController {
 		return "admin/orders";
 	}
 	
+	/**
+	 * 新增订单
+	 * @param response
+	 * @param bean
+	 * @param dList
+	 * @return
+	 */
 	@RequestMapping("/insertOrder")
 	public @ResponseBody Orders insertOrder(HttpServletResponse response, OrdersBean bean, @RequestParam(value = "detailArr[]") List<String> dList){
 		String adminId = "402882355a5e4b28015a5e4b2d9f0000";
 		bean.setAdminId(adminId);
 		Orders save = orderService.save(bean, dList);
 		return save;
+	}
+	
+	/**
+	 * 修改订单状态	(1为未完成订单,2为完成的订单,0为取消的订单,-1为错误)
+	 * @param response
+	 * @param oIds
+	 * @param index
+	 * @return
+	 */
+	@RequestMapping("/changeState")
+	public String changeState(HttpServletResponse response, @RequestParam(value = "oIds[]") List<String> oIds, @RequestParam("index") String index){
+		String returnStr = "";
+		orderService.changeState(oIds, index.trim());
+		returnStr = "success";
+		return returnStr;
 	}
 	
 	@RequestMapping("/findOrdersByPage")
