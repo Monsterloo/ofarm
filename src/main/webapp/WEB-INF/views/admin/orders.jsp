@@ -83,7 +83,7 @@
 						<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">关闭</span>
                         </button>
 						<i class="fa fa-laptop modal-icon"></i>
-						<h4 class="modal-title">新增订单</h4>
+						<h4 class="modal-title" id="showModalTitle">新增订单</h4>
 						<!--<small class="font-bold">这里可以显示副标题。-->
 					</div>
 					<div class="modal-body">

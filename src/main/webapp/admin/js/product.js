@@ -2,7 +2,6 @@ var ProductObj = {};
 var nodeArr = [];
 var sonnodeArr = [];
 var cArr = new Array();
-var selectcount = cArr.length;
 var index = 0;	//添加||编辑
 
 //Web Uploader实例
@@ -90,11 +89,15 @@ ProductObj.reloadTable = function(){
 		}).on('check.bs.table', function(e, row) {
 			cArr.push(row);
 			console.info(cArr);
-	        selectcount = cArr.length;
 	   	}).on('uncheck.bs.table', function(e, row) {
-	        cArr.splice($.inArray(row),1);
+	   		$.each(cArr,function(i,obj){
+	   			if(obj.pid == row.pid){
+	   				cArr.splice(i,1);
+	   				return false;
+	   			}
+	   		});
+	        //cArr.splice($.inArray(row),1);
 	        console.info(cArr);
-	        selectcount = cArr.length;
 	    })
 		 //全选
 		 .on('check-all.bs.table', function(e,row) {
@@ -107,7 +110,6 @@ ProductObj.reloadTable = function(){
 	        	cArr.push(obj);
 	        });
 			console.info(cArr);
-			selectcount = cArr.length;
 		 })
 		 //取消全选
 		 .on('uncheck-all.bs.table', function(e,row) {
@@ -117,7 +119,6 @@ ProductObj.reloadTable = function(){
 			$(selects).removeClass("selected");
 			cArr.splice(0,cArr.length);		//清除数组
 			console.info(cArr);
-			selectcount = cArr.length;
 		 });  
 	  
 	    /*$('#exampleTableEvents').on('all.bs.table', function(e, name, args) {
@@ -499,7 +500,7 @@ ProductObj.initEvents = function(){
 	
 	//修改信息
 	$("#editbtn").bind("click",function(){
-		if(selectcount > 1){
+		if(cArr.length > 1){
 			swal({
                 title: "请选择一条产品项!",
                 text: "请选择一条产品项",
@@ -507,7 +508,7 @@ ProductObj.initEvents = function(){
             }, function () {
             	return;
             });
-		}else if(selectcount == 0){
+		}else if(cArr.length == 0){
 			swal({
                 title: "请选择产品项!!",
                 text: "请选择管产品项!",

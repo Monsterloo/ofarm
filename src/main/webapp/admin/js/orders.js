@@ -78,7 +78,13 @@ OrdersObj.reloadTable = function(){
 			oArr.push(row);
 			console.info(oArr);
 	   	}).on('uncheck.bs.table', function(e, row) {
-	        oArr.splice($.inArray(row),1);
+	   		$.each(oArr,function(i,obj){
+	   			if(obj.oid == row.oid){
+	   				oArr.splice(i,1);
+	   				return false;
+	   			}
+	   		});
+	        //oArr.splice($.inArray(row),1);
 	        console.info(oArr);
 	    })
 		 //全选
@@ -324,7 +330,7 @@ OrdersObj.initEvents = function(){
 	//显示添加模态框
 	$("#insertbtn").bind("click",function(){
 		$("#myModal").modal("show");
-		$(".modal-title").html("添加新产品");
+		$("#showModalTitle").html("新增订单");
 	});
 	
 	//加载子模态框
