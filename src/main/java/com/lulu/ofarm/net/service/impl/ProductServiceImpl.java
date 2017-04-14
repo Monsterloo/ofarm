@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
@@ -54,16 +55,16 @@ public class ProductServiceImpl implements ProductService {
 	}
 	
 	
-	public Page<Product> findProductByPage(Pageable page/*, final String loginname*/) {
+	public Page<Product> findProductByPage(Pageable page, String pname) {
 		Specification<Product> spec = new Specification<Product>() {
 			
 			@Override
 			public Predicate toPredicate(Root<Product> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 				// TODO Auto-generated method stub
 				List<Predicate> predicates = new ArrayList<Predicate>();
-				/*if(null != loginname && !loginname.isEmpty()){
-					predicates.add(cb.like(root.get("loginname").as(String.class), "%"+loginname+"%"));
-				}*/
+				if(null != pname && !pname.isEmpty()){
+					predicates.add(cb.like(root.get("pname").as(String.class), "%"+pname+"%"));
+				}
 				predicates.add(cb.equal(root.get("state").as(String.class), "1"));
 				if(predicates.isEmpty()){
 					return query.getRestriction();
@@ -106,5 +107,20 @@ public class ProductServiceImpl implements ProductService {
 		for(String pid : pIds){
 			productDao.delProduct(pid);
 		}
+	}
+
+	@Override
+	public long findCount() {
+		// TODO Auto-generated method stub
+		Query query = entityManager.createNativeQuery("SELECT COUNT(1) FROM product WHERE state = 1");
+		long count = Long.parseLong(query.getSingleResult().toString());
+		return count;
+	    /*CriteriaBuilder critBuilder = entityManager.getCriteriaBuilder();  
+	    CriteriaQuery<Long> critQuery = critBuilder.createQuery(Long.class);  
+	    Root<Product> root = critQuery.from(Product.class);
+	    
+	    critQuery.select(critBuilder.countDistinct(root));  
+	    long count = entityManager.createQuery(critQuery).getSingleResult().longValue();  
+		return count;*/
 	}
 }

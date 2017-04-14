@@ -16,4 +16,6 @@ public interface CategoryService {
 	public void delAllCategory();
 
 	public void delCategory(ZtreeNode treeNode);
+
+	public long findCount();
 }

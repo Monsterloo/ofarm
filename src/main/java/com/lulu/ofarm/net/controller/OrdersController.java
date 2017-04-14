@@ -3,6 +3,7 @@ package com.lulu.ofarm.net.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -31,8 +33,9 @@ public class OrdersController {
 	@Autowired
 	private OrdersService orderService;
 	
-	@RequestMapping("/main")
-	public String type(){
+	@RequestMapping(value = "/main")
+	public String type(HttpServletRequest request, String mode){
+		request.getSession().setAttribute("mode", mode);
 		return "admin/orders";
 	}
 	
@@ -59,7 +62,7 @@ public class OrdersController {
 	 * @return
 	 */
 	@RequestMapping("/changeState")
-	public String changeState(HttpServletResponse response, @RequestParam(value = "oIds[]") List<String> oIds, @RequestParam("index") String index){
+	public @ResponseBody String changeState(HttpServletResponse response, @RequestParam(value = "oIds[]") List<String> oIds, @RequestParam("index") String index){
 		String returnStr = "";
 		orderService.changeState(oIds, index.trim());
 		returnStr = "success";
@@ -67,14 +70,15 @@ public class OrdersController {
 	}
 	
 	@RequestMapping("/findOrdersByPage")
-	public @ResponseBody PageResultForBootstrap<OrdersBean> findProductByPage(@RequestParam(value="pageSize",defaultValue="10") Integer pageSize,@RequestParam(value="pageNumber",defaultValue="1") Integer pageNumber, String searchText){
+	public @ResponseBody PageResultForBootstrap<OrdersBean> findProductByPage(HttpServletRequest request, @RequestParam(value="pageSize",defaultValue="10") Integer pageSize,@RequestParam(value="pageNumber",defaultValue="1") Integer pageNumber, String searchText){
+		String mode = request.getParameter("mode");
 		PageResultForBootstrap<Orders> bean = new PageResultForBootstrap<Orders>();
 		PageResultForBootstrap<OrdersBean> beanObj = new PageResultForBootstrap<OrdersBean>();
 		List<OrdersBean> beanList = new ArrayList<OrdersBean>();
 		
 		Sort sort =new Sort(Direction.DESC,"createtime");	
 		PageRequest pr = new PageRequest(pageNumber-1, pageSize,sort);
-		Page<Orders> pageObj = orderService.findOrdersByPage(pr);
+		Page<Orders> pageObj = orderService.findOrdersByPage(pr, mode, searchText);
 		
 		bean.setTotal(pageObj.getTotalElements());
 		bean.setRows(pageObj.getContent());

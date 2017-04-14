@@ -14,13 +14,15 @@ public interface ProductService {
 	
 	public ProductBean conver2Bean(Product product, ProductBean bean);
 	
-	public Page<Product> findProductByPage(Pageable page);
+	public Page<Product> findProductByPage(Pageable page, String pname);
 	
 	public Product findProductById(String id);
 	
 	public Product saveProductImgURL(String id, String newFileName);
 	
 	public Product save(Product product);
+	
+	public long findCount();
 
 	public void delProduct(List<String> pIds);
 }

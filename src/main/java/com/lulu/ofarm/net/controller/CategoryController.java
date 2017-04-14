@@ -78,6 +78,12 @@ public class CategoryController {
 		outPrintResult(response, returnStr);
 	}
 	
+	@RequestMapping("/findCount")
+	public @ResponseBody String findCount(HttpServletResponse response){
+		long count = categoryService.findCount();
+		return count+"";
+	}
+	
 	private void outPrintResult(HttpServletResponse response,String returnStr) {
 		try {
 			response.setContentType("text/plain; charset=utf-8");

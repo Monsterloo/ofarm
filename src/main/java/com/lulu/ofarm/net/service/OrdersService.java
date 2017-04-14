@@ -14,7 +14,7 @@ public interface OrdersService {
 	
 	public OrdersBean conver2Bean(Orders order, OrdersBean bean);
 	
-	public Page<Orders> findOrdersByPage(Pageable page);
+	public Page<Orders> findOrdersByPage(Pageable page, String mode, String customername);
 
 	public Orders save(OrdersBean bean, List<String> detailStr);
 	

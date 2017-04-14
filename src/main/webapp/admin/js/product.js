@@ -14,6 +14,9 @@ jQuery(function() {
 	//ProductObj.initUpload();
 });
 
+/**
+ * 初始化table
+ */
 ProductObj.reloadTable = function(){
 	  $('#exampleTableEvents').bootstrapTable({
 	      url: "../product/findProductByPage",
@@ -165,6 +168,9 @@ ProductObj.reloadTable = function(){
 	  $("#infoform").submit(function(ev){ev.preventDefault();});
 }
 
+/**
+ * 新增|编辑 产品
+ */
 ProductObj.submit = function(){
 	//获取表单对象
 	var bootstrapValidator = $("#infoform").data('bootstrapValidator');
@@ -200,6 +206,9 @@ ProductObj.submit = function(){
 	}
 }
 
+/**
+ * 初始化webupload
+ */
 ProductObj.initUpload = function(){
 	var $ = jQuery,
 	$list = $('#fileList'),
@@ -386,7 +395,9 @@ ProductObj.initUpload = function(){
 
 }
 
-
+/**
+ * 产品信息验证
+ */
 ProductObj.bootstrapValidator = function(){
 	$("#infoform").bootstrapValidator({
 		feedbackIcons: {
@@ -491,7 +502,9 @@ ProductObj.bootstrapValidator = function(){
 	});
 }
 
-
+/**
+ * 初始化事件
+ */
 ProductObj.initEvents = function(){
 	//提交表单
 	$(".btn-primary").bind("click", function(){
@@ -640,7 +653,6 @@ ProductObj.initEvents = function(){
 	
 }
 
-
 function getCategoryRootId(cList){
 	nodeArr = [];
 	$.each(cList,function(i,o){
@@ -649,7 +661,6 @@ function getCategoryRootId(cList){
 		}
 	});
 }
-
 
 function getCategoryNode(id,cList){
 	sonnodeArr = [];
@@ -662,15 +673,10 @@ function getCategoryNode(id,cList){
 
 
 function queryParams(params) {
-  return {
-    type: 'owner',
-    sort: 'updated',
-    direction: 'desc',
-    per_page: 100,
-    page: 1
-  };
+	  var temp = {
+		  'pageSize' : params.limit,   //页面大小 
+		  'pageNumber' : params.pageNumber,  //页码 
+		  'searchText' : $(".input-outline").val()
+	  }
+	  return temp;
 }
-
-
-
-

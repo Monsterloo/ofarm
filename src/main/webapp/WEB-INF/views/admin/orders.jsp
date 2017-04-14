@@ -22,10 +22,12 @@
     	<link href="${ctx}/admin/css/plugins/bootstrap-select/bootstrap-select.css" rel="stylesheet">
 </head>
 <body class="gray-bg">
+		<input type="hidden" value="${mode }" id="mode" />
 		<div class="wrapper wrapper-content animated fadeInRight">
 			<div class="col-sm-12">
 				<!-- Example Events -->
 				<div class="example-wrap">
+				<div id="modeResult" role="alert"></div>
 					<div class="example">
 
 						<div class="btn-group hidden-xs" id="exampleTableEventsToolbar" role="group">
@@ -42,10 +44,10 @@
                                         <i class="glyphicon glyphicon-plus" aria-hidden="true"></i>
                                     </button>
 							<button type="button" class="btn btn-outline btn-default" id="editbtn">
-                                        <i class="glyphicon glyphicon-pencil" aria-hidden="true"></i>
+                                        <i class="glyphicon glyphicon-ok" aria-hidden="true"></i>
                                     </button>
 							<button type="button" class="btn btn-outline btn-default" id="delbtn">
-                                        <i class="glyphicon glyphicon-trash" aria-hidden="true"></i>
+                                        <i class="glyphicon glyphicon-remove" aria-hidden="true"></i>
                                     </button>
 						</div>
 
@@ -112,19 +114,7 @@
 			                                            <th data-field="state">删除</th>
 			                                        </tr>
 			                                     </thead>
-			                                        <tbody id="productArea">
-			                                        	<!-- <tr p-id="2c90b5a75b3bd87a015b3bd887200004">
-			                                        		<td>32</td>
-				                                        	<td>32</td>
-				                                        	<td><input type="text" /></td>
-				                                        	<td><button class="btn btn-danger btn-circle" type="button"><i class="fa fa-times"></i></button></td>
-			                                        	</tr>
-			                                        	<tr p-id="2c90b5a75b3bd87a015b3bd887200005">
-			                                        		<td>32</td>
-				                                        	<td>3233</td>
-				                                        	<td><input type="text" /></td>
-				                                        	<td><button class="btn btn-danger btn-circle" type="button"><i class="fa fa-times"></i></button></td>
-			                                        	</tr> -->
+			                                     <tbody id="productArea">
 			                                     </tbody>
                                 			</table>
 										</div>

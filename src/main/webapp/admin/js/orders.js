@@ -2,6 +2,7 @@ var OrdersObj = {};
 var oArr = new Array();
 var product;
 var data_index = 0;
+var mode = $('#modeParam', parent.document).val();
 
 jQuery(function() {
 	OrdersObj.reloadTable();
@@ -9,6 +10,9 @@ jQuery(function() {
 	OrdersObj.bootstrapValidator();
 });
 
+/**
+ * 初始化table
+ */
 OrdersObj.reloadTable = function(){
 	  $('#exampleTableEvents').bootstrapTable({
 	      url: "../orders/findOrdersByPage",
@@ -33,7 +37,7 @@ OrdersObj.reloadTable = function(){
 	      queryParamsType:'', //默认值为 'limit' ,在默认情况下 传给服务端的参数为：offset,limit,sort
 	      					  // 设置为 ''  在这种情况下传给服务器的参数为：pageSize,pageNumber
 	      sidePagination: "server",  //分页方式：client客户端分页，server服务端分页（*）
-	      //queryParams: queryParams,//前端调用服务时，会默认传递上边提到的参数，如果需要添加自定义参数，可以自定义一个函数返回请求参数
+	      queryParams: queryParams,	//前端调用服务时，会默认传递上边提到的参数，如果需要添加自定义参数，可以自定义一个函数返回请求参数
 	      columns: [{
 	          checkbox: true
 	      }, {
@@ -109,10 +113,28 @@ OrdersObj.reloadTable = function(){
 			//console.info(oArr);
 		 });
 	  
+	  //table顶部的标识语
+	  $(".input-outline").attr("placeholder","请输入客户名字");
+	  if(mode == "1"){
+		  $("#modeResult").addClass("alert alert-warning");
+		  $("#modeResult").html("未完成的订单");
+		  //$("#exampleTableEventsToolbar").hide();
+	  } else if(mode == "2"){
+		  $("#modeResult").addClass("alert alert-success");
+		  $("#modeResult").html("已完成的订单");
+		  $("#exampleTableEventsToolbar").hide();
+	  } else if(mode == "0"){
+		  $("#modeResult").addClass("alert alert-danger");
+		  $("#modeResult").html("取消的订单");
+		  $("#exampleTableEventsToolbar").hide();
+	  }
 	  
 	  $("#infoform").submit(function(ev){ev.preventDefault();});
 }
 
+/**
+ * 模态框信息验证
+ */
 OrdersObj.bootstrapValidator = function(){
 	$("#infoform").bootstrapValidator({
 		feedbackIcons: {
@@ -200,12 +222,15 @@ OrdersObj.bootstrapValidator = function(){
 	});
 }
 
+/**
+ * 新增订单
+ */
 OrdersObj.submit = function(){
 	//获取表单对象
 	var bootstrapValidator = $("#infoform").data('bootstrapValidator');
 	//手动触发验证
-	//bootstrapValidator.validate();
-	//if(bootstrapValidator.isValid()){
+	bootstrapValidator.validate();
+	if(bootstrapValidator.isValid()){
 		var $area = $("#productArea");
 		var $trs = $area.find("tr");
 		var detailArr = [];
@@ -263,9 +288,12 @@ OrdersObj.submit = function(){
 				}
 			}, 'json');
 		}
-	//}
+	}
 }
 
+/**
+ * 初始化事件
+ */
 OrdersObj.initEvents = function(){
 	//添加订单
 	$("#saveOrder").bind("click", function(){
@@ -420,6 +448,11 @@ OrdersObj.initEvents = function(){
 	
 }
 
+
+
+/**
+ * 改变订单状态
+ */
 OrdersObj.changeState = function(index){
 	if(oArr.length == 0){
 		swal({
@@ -457,24 +490,6 @@ OrdersObj.changeState = function(index){
           	$.each(oArr,function(i,o){
           		oIds.push(o.oid);
           	});
-          	/*$.post('../orders/changeState',{
-					'oIds[]' : oIds,
-					'index' : index
-				},function(data,status){
-					if(data == "success"){
-						swal({
-		                    title: confirm+"成功！",
-		                    text: "您已经"+confirm+"了选中的订单",
-		                    type: "success"
-		                }, function () {
-		                	//OrdersObj.reloadTable();
-		                	window.location.reload();
-		                });
-						//swal("删除成功！", "您已经删除了选中的员工信息。", "success");
-					}else{
-						swal(confirm+"失败", " :) ", "error");
-					}
-				});*/
           	$.ajax({
           		url:'../orders/changeState',
           		type : 'POST',
@@ -507,6 +522,18 @@ OrdersObj.changeState = function(index){
       });
 		
 	} 
+}
+
+
+
+function queryParams(params) {
+	  var temp = {
+		  'pageSize' : params.limit,   //页面大小 
+		  'pageNumber' : params.pageNumber,  //页码 
+		  'searchText' : $(".input-outline").val(),
+		  'mode' : mode //模式
+	  }
+	  return temp;
 }
 
 function isNumber(number){

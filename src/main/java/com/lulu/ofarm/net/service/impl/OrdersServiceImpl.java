@@ -99,18 +99,17 @@ public class OrdersServiceImpl implements OrdersService {
 	}
 
 	@Override
-	public Page<Orders> findOrdersByPage(Pageable page) {
+	public Page<Orders> findOrdersByPage(Pageable page, String mode, String customername) {
 		Specification<Orders> spec = new Specification<Orders>() {
 
 			@Override
 			public Predicate toPredicate(Root<Orders> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 				List<Predicate> predicates = new ArrayList<Predicate>();
-				/*
-				 * if(null != loginname && !loginname.isEmpty()){
-				 * predicates.add(cb.like(root.get("loginname").as(String.class)
-				 * , "%"+loginname+"%")); }
-				 */
-				predicates.add(cb.equal(root.get("state").as(String.class), "1"));
+				
+			    if(null != customername && !customername.isEmpty()){
+			    predicates.add(cb.like(root.get("customername").as(String.class), "%"+customername+"%")); }
+				 
+				predicates.add(cb.equal(root.get("state").as(String.class), mode));
 				if (predicates.isEmpty()) {
 					return query.getRestriction();
 				} else {

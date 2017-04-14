@@ -70,10 +70,10 @@
 							<span class="ng-scope">产品</span>
 						</li>
 						<li>
-							<a class="J_menuItem" href="${ctx }/product/main"><i class="fa fa-envelope"></i> <span class="nav-label">产品列表</span><span class="label label-warning pull-right">16</span></a>
+							<a class="J_menuItem" href="${ctx }/product/main"><i class="fa fa-envelope"></i> <span class="nav-label">产品列表</span><span class="label label-danger pull-right" id="productCount"></span></a>
 						</li>
 						<li>
-							<a class="J_menuItem" href="${ctx }/category/main"><i class="fa fa-desktop"></i> <span class="nav-label">产品类别管理</span>
+							<a class="J_menuItem" href="${ctx }/category/main"><i class="fa fa-desktop"></i> <span class="nav-label">产品类别管理</span><span class="label label-primary pull-right" id="categoryCount"></span></a>
 								<!--<span class="fa arrow"></span>--></a>
 						</li>
 
@@ -84,15 +84,15 @@
 						<li>
 							<a href="#"><i class="fa fa-flask"></i> <span class="nav-label">订单管理</span><span class="fa arrow"></span></a>
 							<ul class="nav nav-second-level">
-
+								<input type="hidden" id="modeParam" value="1" />
 								<li>
-									<a class="J_menuItem" href="${ctx }/orders/main">未完成订单</a>
+									<a class="J_menuItem" href="${ctx }/orders/main?mode=1">未完成订单</a>
 								</li>
 								<li>
-									<a class="J_menuItem" href="typography.html">已完成订单</a>
+									<a class="J_menuItem" href="${ctx }/orders/main?mode=2">已完成订单</a>
 								</li>
 								<li>
-									<a class="J_menuItem" href="typography.html">取消订单</a>
+									<a class="J_menuItem" href="${ctx }/orders/main?mode=0">取消订单</a>
 								</li>
 							</ul>
 						</li>

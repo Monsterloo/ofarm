@@ -65,7 +65,7 @@ public class ProductController {
 		
 		Sort sort =new Sort(Direction.ASC,"pname");	
 		PageRequest pr = new PageRequest(pageNumber-1, pageSize,sort);
-		Page<Product> pageObj = productService.findProductByPage(pr);
+		Page<Product> pageObj = productService.findProductByPage(pr,searchText);
 		
 		bean.setTotal(pageObj.getTotalElements());
 		bean.setRows(pageObj.getContent());
@@ -170,6 +170,12 @@ public class ProductController {
 		productService.delProduct(pIds);
 		msg = "success";
 		outPrintResult(response, msg);
+	}
+	
+	@RequestMapping("/findCount")
+	public @ResponseBody String findCount(HttpServletResponse response){
+		long count = productService.findCount();
+		return count+"";
 	}
 	
 	private void outPrintResult(HttpServletResponse response,String returnStr) {
