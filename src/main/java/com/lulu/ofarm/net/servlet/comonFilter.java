@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.lulu.ofarm.net.entity.SysAdmin;
 import com.lulu.ofarm.net.util.StringUtil;
 
 
@@ -29,25 +30,28 @@ public class comonFilter implements Filter{
 		
 		//TODO
 		
-		/*HttpServletRequest req = (HttpServletRequest)request;
+
+		HttpServletRequest req = (HttpServletRequest)request;
 		String loc=req.getServletPath();
 
-		if(loc.contains("admin/login")==false
-				&&loc.contains("/assets/")==false
-				&&loc.contains("/css/")==false
-				&&loc.contains("/img/")==false
-				&&loc.contains("/js/")==false
-				&&loc.contains("/doc/")==false
-				&&loc.contains("/cache/")==false
-				&&loc.contains("/template/")==false){
+		/*if(loc.contains("/admin/")==false && loc.contains("/upload/")==false && loc.contains("/backstage/")==false){
 			HttpSession session =  req.getSession();
-			String username=(String)session.getAttribute("loginSuccess");
-			if(StringUtil.isBlank(username)||!"1".equals(username)){
+			SysAdmin admin = (SysAdmin)session.getAttribute("user");
+			if(admin == null ){
 				HttpServletResponse res = (HttpServletResponse)response;
-				res.sendRedirect(req.getServletContext().getContextPath()+"/admin/login");
+				res.sendRedirect(req.getServletContext().getContextPath()+"/backstage/login");
 				return;
 			}
 		}*/
+		HttpSession session =  req.getSession();
+		if(!loc.contains("/css/") && !loc.contains("/fonts/") && !loc.contains("/img/") && !loc.contains("/js/") && !loc.contains("/upload/") && !loc.contains("/backstage/") && !loc.contains("favicon.ico")){
+			SysAdmin admin = (SysAdmin)session.getAttribute("user");
+			if(admin == null){
+				HttpServletResponse res = (HttpServletResponse)response;
+				res.sendRedirect(req.getServletContext().getContextPath()+"/backstage/login");
+				return;
+			}
+		}
 		chain.doFilter(request, response);
 	}
 
