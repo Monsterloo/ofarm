@@ -166,6 +166,111 @@
                 </div>
             </div>
         </div>
+        
+        <!--  -->
+        <div class="modal inmodal fade" id="orderInfo" tabindex="-1" role="dialog"  aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content animated flipInY">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                        <h4 class="modal-title">订单表项</h4>
+                        <small class="font-bold">
+                    </div>
+                    <div class="modal-body">
+                    <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox-content p-xl">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <address>
+                                        <strong>韶关学院丁香苑C栋404</strong><br>
+                                        <abbr title="Phone">总机：</abbr> (+86 10) 8888 8888
+                                    </address>
+                        </div>
+
+                        <div class="col-sm-6 text-right">
+                            <h4>单据编号：</h4>
+                            <h4 class="text-navy" id="orderCode"></h4>
+                            <address>
+						                                 地址<strong id="clientAddress"></strong><br>
+						                                 联系号码：<abbr title="Phone" id="clientPhone"></abbr>
+                            </address>
+                            <p>
+                                <strong>日期：</strong><span id="orderDate"></span>
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="table-responsive m-t">
+                        <table class="table invoice-table">
+                            <thead>
+                                <tr>
+                                    <th>清单</th>
+                                    <th>数量</th>
+                                    <th>单价</th>
+                                    <th>总价</th>
+                                </tr>
+                            </thead>
+                            <tbody id="productList">
+                                <!-- <tr>
+                                    <td>
+                                        <div><strong>尚都比拉2013冬装新款女装 韩版修身呢子大衣 秋冬气质羊毛呢外套</strong>
+                                        </div>
+                                    </td>
+                                    <td>1</td>
+                                    <td>&yen;26.00</td>
+                                    <td>&yen;31,98</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div><strong>11*11夏娜 新款斗篷毛呢外套 女秋冬呢子大衣 韩版大码宽松呢大衣</strong>
+                                        </div>
+                                        <small>双十一特价
+                                            </small>
+                                    </td>
+                                    <td>2</td>
+                                    <td>&yen;80.00</td>
+                                    <td>&yen;196.80</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div><strong>2013秋装 新款女装韩版学生秋冬加厚加绒保暖开衫卫衣 百搭女外套</strong>
+                                        </div>
+                                    </td>
+                                    <td>3</td>
+                                    <td>&yen;420.00</td>
+                                    <td>&yen;1033.20</td>
+                                </tr> -->
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /table-responsive -->
+
+                    <table class="table invoice-total">
+                        <tbody>
+                            <tr>
+                                <td><strong>总价：</strong>
+                                </td>
+                                <td id="totalPrice"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="well m-t"><strong>注意：</strong> 请在30日内完成付款，否则订单会自动取消。
+                    </div>
+                </div>
+            </div>
+        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+                        <button type="button" class="btn btn-primary" id="print">打印</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
 		</div>
 		</div>

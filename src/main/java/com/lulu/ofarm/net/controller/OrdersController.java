@@ -91,4 +91,10 @@ public class OrdersController {
 		beanObj.setTotal(pageObj.getTotalElements());
 		return beanObj;
 	}
+	
+	@RequestMapping("/findOrdersById")
+	public @ResponseBody OrdersBean findOrdersById(HttpServletResponse response, String oid){
+		OrdersBean bean = orderService.findOrdersById(oid);
+		return bean;
+	}
 }

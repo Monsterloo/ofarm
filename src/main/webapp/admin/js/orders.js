@@ -3,6 +3,7 @@ var oArr = new Array();
 var product;
 var data_index = 0;
 var mode = $('#modeParam', parent.document).val();
+var oid = "";
 
 jQuery(function() {
 	OrdersObj.reloadTable();
@@ -78,9 +79,12 @@ OrdersObj.reloadTable = function(){
 
 	  $('#exampleTableEvents').on('all.bs.table', function(e, name, args) {
 			//console.log('Event:', name, ', data:', args);
-		}).on('check.bs.table', function(e, row) {
+		}).on('check.bs.table', function(e, row) {		//点击
 			oArr.push(row);
-			console.info(oArr);
+			//console.info(oArr);
+			$("#orderInfo").modal("show");
+			oid = row.oid;
+			
 	   	}).on('uncheck.bs.table', function(e, row) {
 	   		$.each(oArr,function(i,obj){
 	   			if(obj.oid == row.oid){
@@ -130,6 +134,48 @@ OrdersObj.reloadTable = function(){
 	  }
 	  
 	  $("#infoform").submit(function(ev){ev.preventDefault();});
+}
+
+/**
+ * 打印订单表项信息
+ */
+OrdersObj.showOrderDetail = function(){
+	$.post('../orders/findOrdersById',{
+		'oid':oid
+	},function(data,status){
+		console.info(data);
+		oid
+		$("#orderCode").html(data.oid);
+		$("#clientAddress").html(data.customeraddress);
+		$("#clientPhone").html(data.customerphone);
+		$("#orderDate").html(data.createtime);
+		var odList = data.orderdetailBeanList;
+		var html = "";
+		var total = 0;
+		$.each(odList,function(i, od){
+			/*var tr = "<tr>";
+			tr += "<td><div><strong>"+od.pname+"</strong></div><small></small><td>";
+			tr += "<td>"+od.number+"<td>";
+			tr += "<td>&yen;"+od.price+"<td>";
+			tr += "<td>&yen;"+od.totalPrice+"<td>";
+			tr += "</tr>";*/
+			var tr = "<tr>"+
+            "<td>"+
+            "    <div><strong>"+od.pname+"</strong>"+
+            "    </div>"+
+            "    <small>---"+
+            "        </small>"+
+            "</td>"+
+            "<td>"+od.number+"</td>"+
+            "<td>&yen;"+od.price+"</td>"+
+            "<td>&yen;"+od.totalPrice+"</td>"+
+        	"</tr>";
+			total += od.totalPrice;
+			html += tr;
+		});
+		$("#productList").html(html);
+		$("#totalPrice").html("&yen;"+total);
+	},'json');
 }
 
 /**
@@ -310,6 +356,10 @@ OrdersObj.initEvents = function(){
 		}
 	});
 	
+	$("#print").bind("click", function(){
+		window.print();
+	});
+	
 	//添加产品
 	$("#saveProduct").bind("click", function(){
 		if($("#pTable .selected").length < 1){
@@ -429,6 +479,11 @@ OrdersObj.initEvents = function(){
 	//显示模态框
 	$('#myModal').on('shown.bs.modal', function () {
 		$('#infoform').data('bootstrapValidator').resetForm(true);
+	});
+	
+	//显示订单模态框
+	$('#orderInfo').on('shown.bs.modal', function () {
+		OrdersObj.showOrderDetail();
 	});
 	
 	//第二个模态框关闭

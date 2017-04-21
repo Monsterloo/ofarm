@@ -1,6 +1,7 @@
 package com.lulu.ofarm.net.webmodel;
 
 import java.util.Date;
+import java.util.List;
 
 public class OrdersBean {
 	private String oid;
@@ -21,6 +22,8 @@ public class OrdersBean {
 
 	private String state;
 
+	private List<OrderdetailBean> orderdetailBeanList;
+	
 	public String getOid() {
 		return oid;
 	}
@@ -92,6 +95,14 @@ public class OrdersBean {
 	public void setState(String state) {
 		this.state = state;
 	}
-	
+
+	public List<OrderdetailBean> getOrderdetailBeanList() {
+		return orderdetailBeanList;
+	}
+
+	public void setOrderdetailBeanList(List<OrderdetailBean> orderdetailBeanList) {
+		this.orderdetailBeanList = orderdetailBeanList;
+	}
+
 	
 }

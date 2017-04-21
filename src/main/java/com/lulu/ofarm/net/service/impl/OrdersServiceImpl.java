@@ -29,6 +29,7 @@ import com.lulu.ofarm.net.service.OrdersService;
 import com.lulu.ofarm.net.service.ProductService;
 import com.lulu.ofarm.net.service.SysAdminService;
 import com.lulu.ofarm.net.util.DateUtils;
+import com.lulu.ofarm.net.webmodel.OrderdetailBean;
 import com.lulu.ofarm.net.webmodel.OrdersBean;
 
 @Component
@@ -138,6 +139,22 @@ public class OrdersServiceImpl implements OrdersService {
 			query.executeUpdate();
 		}
 		return null;
+	}
+
+	@Override
+	public OrdersBean findOrdersById(String id) {
+		Orders order = ordersDao.findOne(id);
+		List<Orderdetail> odList = orderdetailService.findOrderdetailByOrder(order);
+		OrdersBean bean = new OrdersBean();
+		conver2Bean(order, bean);
+		List<OrderdetailBean> odBeanList = new ArrayList<OrderdetailBean>();
+		for(Orderdetail od : odList){
+			OrderdetailBean odBean = new OrderdetailBean();
+			orderdetailService.conver2Bean(od, odBean);
+			odBeanList.add(odBean);
+		}
+		bean.setOrderdetailBeanList(odBeanList);
+		return bean;
 	}
 
 }
