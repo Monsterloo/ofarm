@@ -13,7 +13,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -69,6 +68,14 @@ public class OrdersController {
 		return returnStr;
 	}
 	
+	/**
+	 * 分页
+	 * @param request
+	 * @param pageSize
+	 * @param pageNumber
+	 * @param searchText
+	 * @return
+	 */
 	@RequestMapping("/findOrdersByPage")
 	public @ResponseBody PageResultForBootstrap<OrdersBean> findProductByPage(HttpServletRequest request, @RequestParam(value="pageSize",defaultValue="10") Integer pageSize,@RequestParam(value="pageNumber",defaultValue="1") Integer pageNumber, String searchText){
 		String mode = request.getParameter("mode");
@@ -92,6 +99,12 @@ public class OrdersController {
 		return beanObj;
 	}
 	
+	/**
+	 * 根据id查询订单详情
+	 * @param response
+	 * @param oid
+	 * @return
+	 */
 	@RequestMapping("/findOrdersById")
 	public @ResponseBody OrdersBean findOrdersById(HttpServletResponse response, String oid){
 		OrdersBean bean = orderService.findOrdersById(oid);

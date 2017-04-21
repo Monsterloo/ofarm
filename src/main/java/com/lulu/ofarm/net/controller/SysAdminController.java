@@ -50,6 +50,7 @@ public class SysAdminController {
 				admin.setRoletype("人事员工");
 			}
 		}
+		bean.setTotal(pageObj.getTotalElements());
 		return bean;
 	}
 	

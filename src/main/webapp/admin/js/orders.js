@@ -144,7 +144,6 @@ OrdersObj.showOrderDetail = function(){
 		'oid':oid
 	},function(data,status){
 		console.info(data);
-		oid
 		$("#orderCode").html(data.oid);
 		$("#clientAddress").html(data.customeraddress);
 		$("#clientPhone").html(data.customerphone);

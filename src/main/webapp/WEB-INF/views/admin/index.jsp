@@ -102,7 +102,7 @@
 							<span class="ng-scope">销售</span>
 						</li>
 						<li>
-							<a class="J_menuItem" href="css_animation.html"><i class="fa fa-magic"></i> <span class="nav-label">销售图表</span></a>
+							<a class="J_menuItem" href="${ctx }/chart/main"><i class="fa fa-magic"></i> <span class="nav-label">销售图表</span></a>
 						</li>
 
 						<li class="line dk"></li>
@@ -110,7 +110,7 @@
 							<span class="ng-scope">企业消息</span>
 						</li>
 						<li>
-							<a class="J_menuItem" href="css_animation.html"><i class="fa fa-magic"></i> <span class="nav-label">企业日常消息列表</span></a>
+							<a class="J_menuItem" href="${ctx }/news/main"><i class="fa fa-magic"></i> <span class="nav-label">企业日常消息列表</span></a>
 						</li>
 
 						
@@ -164,7 +164,7 @@
 					</nav>
 				</div>
 				<div class="row J_mainContent" id="content-main">
-					<iframe id="J_iframe" width="100%" height="100%" src="${ctx }/orders/main" frameborder="0" data-id="index_v1.html" seamless></iframe>
+					<iframe id="J_iframe" width="100%" height="100%" src="${ctx }/news/main" frameborder="0" data-id="index_v1.html" seamless></iframe>
 				</div>
 			</div>
 			<!--右侧部分结束-->

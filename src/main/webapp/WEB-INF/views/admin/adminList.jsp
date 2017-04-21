@@ -140,6 +140,7 @@
 				      url: "../sysAdmin/searchAllAdmin",
 				      search: true,
 				      striped: true,
+				      height : "600",
 					  clickToSelect: true,
 				      pagination: true,
 				      showRefresh: true,
@@ -249,8 +250,9 @@
 
 			function queryParams(params) {
 				  var temp = {
-					  pageSize : params.limit,   //页面大小 
-					  pageNumber : params.pageNumber,  //页码 
+					  /* pageSize : params.limit,   //页面大小  */
+					  pageSize : $(".page-size").html(),   //页面大小
+					  pageNumber : params.pageNumber,  //页码 page-size
 					  searchText : $(".input-outline").val()
 				  }
 				  return temp;

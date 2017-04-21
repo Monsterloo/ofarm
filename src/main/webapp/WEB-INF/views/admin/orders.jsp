@@ -123,7 +123,7 @@
 								</div>
 								<button type="button" id="showProduct" class="btn btn-block btn-w-m btn-success" data-toggle="modal" data-target="#pModal">+</button>
 							</div>
-                            <input type="hidden" name="creattime" id="creattime" />
+                            <input type="hidden" name="createtime" id="creattime" />
 							<input type="hidden" name="state" id="state" />
 						</form>
 					</div>
@@ -167,7 +167,7 @@
             </div>
         </div>
         
-        <!--  -->
+        <!--订单表项模态框 -->
         <div class="modal inmodal fade" id="orderInfo" tabindex="-1" role="dialog"  aria-hidden="true">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content animated flipInY">
@@ -278,7 +278,7 @@
 		</div>
 
 </body>
-<!-- 全局js -->
+		<!-- 全局js -->
 		<script src="${ctx}/admin/js/jquery.min.js?v=2.1.4"></script>
 		<script src="${ctx}/admin/js/bootstrap.min.js?v=3.3.6"></script>
 
