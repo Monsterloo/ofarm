@@ -30,7 +30,7 @@
 						</div>
 						<div class="col-xs-8 text-right">
 							<span> 总收入 </span>
-							<h2 class="font-bold">&yen; 4,232</h2>
+							<h2 class="font-bold" id="totalIncome">&yen; 4,232</h2>
 						</div>
 					</div>
 				</div>
@@ -44,7 +44,7 @@
 						</div>
 						<div class="col-xs-8 text-right">
 							<span> 新订单 </span>
-							<h2 class="font-bold">260</h2>
+							<h2 class="font-bold" id="newOrders">260</h2>
 						</div>
 					</div>
 				</div>
@@ -57,7 +57,7 @@
 						</div>
 						<div class="col-xs-8 text-right">
 							<span> 产品数量 </span>
-							<h2 class="font-bold">12</h2>
+							<h2 class="font-bold" id="productNumber">12</h2>
 						</div>
 					</div>
 				</div>
@@ -79,19 +79,19 @@
 		<div class="col-sm-4">
 			<div class="widget lazur-bg p-xl">
 
-				<h2>Beaut-zihan</h2>
+				<h2>junlon_lu</h2>
 				<ul class="list-unstyled m-t-md">
 					<li><span class="fa fa-envelope m-r-xs"></span> <label>Email:</label>
-						497915773@qq.com</li>
+						496937493@qq.com</li>
 					<li><span class="fa fa-home m-r-xs"></span> <label>Address:</label>
-						上海市闵行区绿地科技岛广场A座2606室</li>
+						韶关学院丁香苑C栋404</li>
 					<li><span class="fa fa-phone m-r-xs"></span> <label>Contact:</label>
-						(+020) 6780 3462</li>
+						(+020) 8888 8888</li>
 				</ul>
 
 			</div>
 		</div>
-		<div class="col-sm-6">
+		<div class="col-sm-8">
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
                         <h5>饼状图</h5>
@@ -114,7 +114,7 @@
                         </div>
                     </div>
                     <div class="ibox-content">
-                        <div class="echarts" id="echarts-pie-chart"></div>
+                        <div class="echarts" id="echarts-pie-chart" style="width:500px;height:300px;"></div>
                     </div>
                 </div>
             </div>
@@ -122,54 +122,19 @@
 
 	<!-- 全局js -->
 	<script src="${ctx}/admin/js/jquery.min.js?v=2.1.4"></script>
-	<script src="${ctx}/admin/js/bootstrap.min.js?v=3.3.6"></script>
+	<%-- <script src="${ctx}/admin/js/bootstrap.min.js?v=3.3.6"></script> --%>
 	<!-- 自定义js -->
-	<script src="${ctx}/admin/js/content.js?v=1.0.0"></script>
+	<%-- <script src="${ctx}/admin/js/content.js?v=1.0.0"></script> --%>
 	
 	<!-- ECharts -->
-    <script src="${ctx}/admin/js/plugins/echarts/echarts-all.js"></script>
+    <%-- <script src="${ctx}/admin/js/plugins/echarts/echarts-all.js"></script> --%>
+    <script src="${ctx}/admin/js/echarts.js"></script>
     
-    <!-- ECharts demo data -->
-    <script src="${ctx}/admin/js/demo/echarts-demo.js"></script>
+    <!-- chart.js -->
+    <script src="${ctx}/admin/js/chart.js"></script>
     
     <script type="text/javascript" type="text/javascript">
-    jQuery(function() {
-    	var pieChart = echarts.init(document.getElementById("echarts-pie-chart"));
-        var pieoption = {
-            title : {
-                text: '某站点用户访问来源',
-                subtext: '纯属虚构',
-                x:'center'
-            },
-            tooltip : {
-                trigger: 'item',
-                formatter: "{a} <br/>{b} : {c} ({d}%)"
-            },
-            legend: {
-                orient : 'vertical',
-                x : 'left',
-                data:['直接访问','邮件营销','联盟广告','视频广告','搜索引擎']
-            },
-            calculable : true,
-            series : [
-                {
-                    name:'访问来源',
-                    type:'pie',
-                    radius : '55%',
-                    center: ['50%', '60%'],
-                    data:[
-                        {value:335, name:'直接访问'},
-                        {value:310, name:'邮件营销'},
-                        {value:234, name:'联盟广告'},
-                        {value:135, name:'视频广告'},
-                        {value:1548, name:'搜索引擎'}
-                    ]
-                }
-            ]
-        };
-        pieChart.setOption(pieoption);
-        $(window).resize(pieChart.resize);
-    });
+    
 	</script>
 </body>
 

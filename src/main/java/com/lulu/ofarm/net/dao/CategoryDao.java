@@ -16,6 +16,12 @@ public interface CategoryDao extends SpecificationsRepository<Category, String>{
 	@Query("SELECT c FROM Category c WHERE state=1")
 	public List<Category> findAllCategory();
 	
+	@Query("SELECT c FROM Category c WHERE state=1 and parentid=:parentid")
+	public List<Category> findCategoryByParentid(@Param("parentid")String parentid);
+	
+	@Query("SELECT c FROM Category c WHERE state=1 and parentid!=0")
+	public List<Category> findSonCategory();
+	
 	@Modifying 
 	@Query("UPDATE Category c SET state=0 where id=:id")
 	public int updateCategory(@Param("id")String id);

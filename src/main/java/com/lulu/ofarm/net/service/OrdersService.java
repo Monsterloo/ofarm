@@ -18,6 +18,8 @@ public interface OrdersService {
 
 	public Orders save(OrdersBean bean, List<String> detailStr);
 	
+	public long findCount();
+	
 	public OrdersBean findOrdersById(String id);
 	
 	public List<Orders> changeState(List<String> oIds, String index);

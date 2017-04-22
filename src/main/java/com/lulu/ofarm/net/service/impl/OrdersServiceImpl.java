@@ -157,4 +157,11 @@ public class OrdersServiceImpl implements OrdersService {
 		return bean;
 	}
 
+	@Override
+	public long findCount() {
+		Query query = entityManager.createNativeQuery("SELECT COUNT(1) FROM orders WHERE state = 1");
+		long count = Long.parseLong(query.getSingleResult().toString());
+		return count;
+	}
+
 }

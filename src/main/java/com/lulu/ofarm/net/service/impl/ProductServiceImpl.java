@@ -22,6 +22,7 @@ import org.springframework.stereotype.Component;
 
 import com.lulu.ofarm.net.dao.CategoryDao;
 import com.lulu.ofarm.net.dao.ProductDao;
+import com.lulu.ofarm.net.entity.Category;
 import com.lulu.ofarm.net.entity.Product;
 import com.lulu.ofarm.net.service.ProductService;
 import com.lulu.ofarm.net.util.DateUtils;
@@ -123,4 +124,5 @@ public class ProductServiceImpl implements ProductService {
 	    long count = entityManager.createQuery(critQuery).getSingleResult().longValue();  
 		return count;*/
 	}
+
 }

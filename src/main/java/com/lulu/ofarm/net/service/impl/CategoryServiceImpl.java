@@ -79,4 +79,17 @@ public class CategoryServiceImpl implements CategoryService {
 		return count;
 	}
 
+	@Override
+	public List<Category> findCategoryByParentId(String parentid) {
+		/*Query query = entityManager.createNativeQuery("SELECT * FROM category WHERE state = 1 and parentid =:parentid");
+		query.setParameter(1, parentid);*/
+		List<Category> pList = categoryDao.findCategoryByParentid(parentid);
+		return pList;
+	}
+
+	@Override
+	public List<Category> findSonCategory() {
+		List<Category> sonList = categoryDao.findSonCategory();
+		return sonList;
+	}
 }

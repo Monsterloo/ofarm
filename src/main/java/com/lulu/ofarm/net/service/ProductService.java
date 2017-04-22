@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import com.lulu.ofarm.net.entity.Category;
 import com.lulu.ofarm.net.entity.Product;
 import com.lulu.ofarm.net.webmodel.ProductBean;
 

@@ -13,6 +13,10 @@ public interface CategoryService {
 	
 	public void saveAll(List<ZtreeNode> nodeList);
 	
+	public List<Category> findCategoryByParentId(String parentid);
+	
+	public List<Category> findSonCategory();
+	
 	public void delAllCategory();
 
 	public void delCategory(ZtreeNode treeNode);
