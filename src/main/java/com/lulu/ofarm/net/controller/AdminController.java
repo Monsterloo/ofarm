@@ -1,5 +1,7 @@
 package com.lulu.ofarm.net.controller;
 
+import java.io.IOException;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -24,15 +26,35 @@ public class AdminController {
 		SysAdmin admin = adminService.findByLoginname(loginname);
 		if(admin != null && password.equals(admin.getPassword())){
 			request.getSession().setAttribute("user", admin);
+			request.setAttribute("errorMsg", "-1");
 			return "admin/index";
 		} else{
+			request.setAttribute("loginname", loginname);
+			request.setAttribute("errorMsg", "用户名或密码错误!");
 			return "admin/login";
 		}
 	}
 	
 	@RequestMapping("/login")
-	public String login(){
+	public String login(HttpServletRequest request, HttpServletResponse response){
+		request.getSession().removeAttribute("user");
+		request.getSession().invalidate();
+		request.setAttribute("errorMsg", "-1");
 		return "admin/login";
+	}
+	
+	@RequestMapping("/loginout")
+	public void loginout(HttpServletRequest request, HttpServletResponse response){
+		try {
+			response.sendRedirect(request.getServletContext().getContextPath()+"/backstage/login");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@RequestMapping("/home")
+	public String home(HttpServletRequest request){
+		return "admin/home";
 	}
 	
 	/*@RequestMapping("/loginin")

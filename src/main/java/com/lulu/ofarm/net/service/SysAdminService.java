@@ -15,6 +15,8 @@ public interface SysAdminService {
 	
 	public SysAdmin findById(String id);
 	
+	public SysAdmin modify(SysAdmin admin);
+	
 	public String getTotalCount();
 	
 	public int getPage(int pageSize, int pageNumber);

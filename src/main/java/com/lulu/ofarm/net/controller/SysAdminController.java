@@ -79,6 +79,18 @@ public class SysAdminController {
 		outPrintResult(response, msg);
 	}
 	
+	@RequestMapping("/modify")
+	public @ResponseBody SysAdmin modify(HttpServletResponse response, SysAdmin admin){
+		SysAdmin result = sysAdminService.modify(admin);
+		return result;
+	}
+	
+	@RequestMapping("/findById")
+	public @ResponseBody SysAdmin findById(HttpServletResponse response, String id){
+		SysAdmin result = sysAdminService.findById(id);
+		return result;
+	}
+	
 	@RequestMapping("/delAdmin")
 	public void delAdmin(HttpServletResponse response,@RequestParam(value = "idArr[]")List<String> idList){
 		String msg = "";

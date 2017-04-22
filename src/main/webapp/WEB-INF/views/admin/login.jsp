@@ -16,6 +16,8 @@
     <link href="${ctx}/admin/css/animate.css" rel="stylesheet">
     <link href="${ctx}/admin/css/style.css" rel="stylesheet">
     <link href="${ctx}/admin/css/login.css" rel="stylesheet">
+    <!-- Sweet Alert -->
+	<link href="${ctx}/admin/css/plugins/sweetalert/sweetalert.css" rel="stylesheet">
     
     <script>
         if (window.top !== window.self) {
@@ -30,7 +32,7 @@
                 <form method="post" action="../backstage/index" id="loginForm">
                     <h4 class="no-margins">登录：</h4>
                     <p class="m-t-md">登录到农资企业后台系统</p>
-                    <div class="form-group"><input type="text" id="loginname" name="loginname" class="form-control uname" placeholder="用户名" /></div>
+                    <div class="form-group"><input type="text" id="loginname" name="loginname" class="form-control uname" placeholder="用户名" value="${loginname}"/></div>
                     <div class="form-group"><input type="password" id="password" name="password" class="form-control pword m-b" placeholder="密码" /></div>
                     <button class="btn btn-success btn-block" id="login">登录</button>
                 </form>
@@ -39,6 +41,7 @@
         <div class="signup-footer">
             <div class="pull-left">
                 &copy; Lulu
+                <input type="hidden" id="errorMsg" value="${errorMsg }" />
             </div>
         </div>
     </div>
@@ -59,11 +62,25 @@
 <!-- BootstrapValidator-->
 <script type="text/javascript" src="${ctx}/admin/js/bootstrapValidator.js"></script>
 
+<!-- Sweet alert -->
+<script src="${ctx}/admin/js/plugins/sweetalert/sweetalert.min.js"></script>
+
 <!-- login.js -->
 <script type="text/javascript" src="${ctx}/admin/js/login.js"></script>
 
 <script type="text/javascript" type="text/javascript">
+jQuery(function() {
+	var errorMsg = $("#errorMsg").val();
+	if(errorMsg != null && errorMsg != "" && typeof(errorMsg) != "undefine" && errorMsg != "-1"){
+		swal({
+			title : errorMsg,
+			type : "error"
+		}, function() {
+			return;
+		});
+	}
+});
 
 </script>
-
+	
 </html>

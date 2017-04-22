@@ -5,6 +5,9 @@ jQuery(function() {
 	LoginObj.initEvents();
 });
 
+/**
+ * 登录提交
+ */
 LoginObj.submit = function(){
 	// 获取表单对象
 	var bootstrapValidator = $("#loginForm").data('bootstrapValidator');
@@ -12,16 +15,38 @@ LoginObj.submit = function(){
 	bootstrapValidator.validate();
 	if (bootstrapValidator.isValid()) {
 		loginForm.submit();
+		/*$.post('../backstage/index',{
+			'loginname' : $("#loginname").val(),
+			'password' : $("#password").val()
+		},function(data,status){
+			if(status == "success"){
+				var errorMsg = $("#errorMsg").val();
+				if(errorMsg != null && errorMsg != "" && typeof(errorMsg) != "undefine"){
+					swal({
+						title : errorMsg,
+						type : "error"
+					}, function() {
+						return;
+					});
+				}
+			}
+		},'json');*/
 	}
 	
 }
 
+/**
+ * 初始化事件
+ */
 LoginObj.initEvents = function() {
 	$("#login").bind("click", function() {
 		LoginObj.submit();
 	});
 }
 
+/**
+ * 验证
+ */
 LoginObj.bootstrapValidator = function() {
 	$("#loginForm").bootstrapValidator({
 		feedbackIcons : {

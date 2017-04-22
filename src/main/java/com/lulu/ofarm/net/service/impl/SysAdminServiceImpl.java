@@ -70,6 +70,12 @@ public class SysAdminServiceImpl implements SysAdminService {
 	}
 	
 	@Override
+	public SysAdmin modify(SysAdmin admin) {
+		SysAdmin result = sysAdminDao.save(admin);
+		return result;
+	}
+	
+	@Override
 	public void delAdminById(List<String> idList) {
 		for(String id : idList){
 			sysAdminDao.delete(id);
@@ -107,5 +113,6 @@ public class SysAdminServiceImpl implements SysAdminService {
 		Page<SysAdmin> pageObj = sysAdminDao.findAll(spec,page);
 		return pageObj;
 	}
+
 
 }

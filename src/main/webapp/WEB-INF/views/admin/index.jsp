@@ -23,6 +23,8 @@
 		<link href="${ctx}/admin/css/font-awesome.min.css?v=4.4.0" rel="stylesheet">
 		<link href="${ctx}/admin/css/animate.css" rel="stylesheet">
 		<link href="${ctx}/admin/css/style.css?v=4.1.0" rel="stylesheet">
+		<!-- Sweet Alert -->
+		<link href="${ctx}/admin/css/plugins/sweetalert/sweetalert.css" rel="stylesheet">
 	</head>
 	
     	<body class="fixed-sidebar full-height-layout gray-bg" style="overflow:hidden">
@@ -39,16 +41,16 @@
 									<span class="clear">
                                     <span class="block m-t-xs" style="font-size:16px;">
                                         <i class="fa fa-area-chart"></i>
-                                        <strong class="font-bold">admin</strong>
+                                        <strong class="font-bold"><span>${user.loginname }</span></strong>
                                     </span>
 									</span>
 								</a>
 							</div>
-							<div class="logo-element">admin
+							<div class="logo-element"><span>${user.loginname }</span>
 							</div>
 						</li>
 						<li>
-							<a class="J_menuItem" href="index_v1.html">
+							<a class="J_menuItem" href="${ctx }/backstage/home">
 								<i class="fa fa-home"></i>
 								<span class="nav-label">主页</span>
 							</a>
@@ -60,10 +62,10 @@
 							<a class="J_menuItem" href="${ctx }/sysAdmin/main"><i class="fa fa-home"></i><span class="nav-label">员工列表</span></a>
 							</a>
 						</li>
-						<li>
+						<!-- <li>
 							<a class="J_menuItem" href="adminList.html"><i class="fa fa-home"></i><span class="nav-label">员工绩效列表</span></a>
 							</a>
-						</li>
+						</li> -->
 
 						<li class="line dk"></li>
 						<li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
@@ -119,6 +121,44 @@
 				</div>
 			</nav>
 			<!--左侧导航结束-->
+			
+			<!-- 修改资料模态框 -->
+			<div class="modal inmodal" id="adminModal" tabindex="-1" role="dialog" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content animated fadeInDownBig" id="model">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">关闭</span>
+	                        </button>
+							<i class="fa fa-laptop modal-icon"></i>
+							<h4 class="modal-title">修改信息</h4>
+							<!--<small class="font-bold">这里可以显示副标题。-->
+	                    </div>
+	                    <div class="modal-body">
+	                        <form id="adminForm" action="${ctx }/sysAdmin/insertAdmin">
+	                        	<input type="hidden" id="id" value="${user.id }"/>
+	                        	<div class="form-group"><label>用户名</label> 
+	                        		 <input type="text" id="loginname" name="loginname" placeholder="请输入新的帐号" class="form-control" value="${user.loginname }" readonly="true"></div>
+	                        	<div class="form-group"><label>密码</label> 
+	                        		 <input type="password" id="password" name="password" placeholder="请输入您的密码" class="form-control"></div>
+	                        	<div class="form-group"><label>确定密码</label	> 
+	                        		 <input type="password" name="surepass" placeholder="请再次输入您的密码" class="form-control"></div>
+	                        	<div class="form-group"><label>手机号码</label> 
+	                        		 <input type="text" id="phone" name="phone" placeholder="请输入您的手机号码" class="form-control" value="${user.phone }"></div>
+	                        	<div class="form-group"><label>Email</label> 
+	                        		 <input type="email" id="email" name="email" placeholder="请输入您的Email" class="form-control" value="${user.email }"></div>
+	                        	<input type="hidden" id="createtime" value="${user.createtime }"/>
+	                        	<input type="hidden" id="roletype" value="${user.roletype }"/>
+	                        	<input type="hidden" id="state" value="${user.state }"/>
+	                        </form>
+	                    </div>
+	                    <div class="modal-footer">
+	                        <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+	                        <button type="button" class="btn btn-primary" id="saveAdmin">保存</button>
+	                    </div>
+	                </div>
+	            </div>
+        	</div>
+			
 			<!--右侧部分开始-->
 			<div id="page-wrapper" class="gray-bg dashbard-1">
 				<div class="row border-bottom">
@@ -144,7 +184,7 @@
 								</a>
 								<ul class="dropdown-menu dropdown-alerts">
 									<li>
-										<a href="mailbox.html">
+										<a href="#" data-toggle="modal" data-target="#adminModal" data-keyboard="true">
 											<div>
 												<i class="glyphicon glyphicon-cog"></i> 修改用户信息
 											</div>
@@ -152,7 +192,7 @@
 									</li>
 									<li class="divider"></li>
 									<li>
-										<a href="profile.html">
+										<a href="${ctx }/backstage/loginout" id="logout">
 											<div>
 												<i class="glyphicon glyphicon-circle-arrow-left"></i> 注销
 											</div>
@@ -164,7 +204,7 @@
 					</nav>
 				</div>
 				<div class="row J_mainContent" id="content-main">
-					<iframe id="J_iframe" width="100%" height="100%" src="${ctx }/news/main" frameborder="0" data-id="index_v1.html" seamless></iframe>
+					<iframe id="J_iframe" width="100%" height="100%" src="${ctx }/backstage/home" frameborder="0" data-id="index_v1.html" seamless></iframe>
 				</div>
 			</div>
 			<!--右侧部分结束-->
@@ -180,6 +220,12 @@
 		<!-- 自定义js -->
 		<script src="${ctx}/admin/js/hAdmin.js?v=4.1.0"></script>
 		<script src="${ctx}/admin/js/index.js" type="text/javascript" ></script>
+		
+		<!-- BootstrapValidator-->
+		<script type="text/javascript" src="${ctx}/admin/js/bootstrapValidator.js"></script>
+		
+		<!-- Sweet alert -->
+		<script src="${ctx}/admin/js/plugins/sweetalert/sweetalert.min.js"></script>
 
 		<!-- 第三方插件 -->
 		<script src="${ctx}/admin/js/plugins/pace/pace.min.js"></script>
