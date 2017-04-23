@@ -12,7 +12,7 @@ public class ZtreeNode {
 	private String state;
 	
 	public String getId() {
-		return id;
+		return id==null?"":id;
 	}
 
 	public void setId(String id) {

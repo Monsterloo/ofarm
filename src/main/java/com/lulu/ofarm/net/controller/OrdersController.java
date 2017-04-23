@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.lulu.ofarm.net.entity.Orders;
+import com.lulu.ofarm.net.entity.SysAdmin;
 import com.lulu.ofarm.net.service.OrdersService;
 import com.lulu.ofarm.net.service.ProductService;
 import com.lulu.ofarm.net.webmodel.OrdersBean;
@@ -46,8 +47,9 @@ public class OrdersController {
 	 * @return
 	 */
 	@RequestMapping("/insertOrder")
-	public @ResponseBody Orders insertOrder(HttpServletResponse response, OrdersBean bean, @RequestParam(value = "detailArr[]") List<String> dList){
-		String adminId = "402882355a5e4b28015a5e4b2d9f0000";
+	public @ResponseBody Orders insertOrder(HttpServletRequest request, HttpServletResponse response, OrdersBean bean, @RequestParam(value = "detailArr[]") List<String> dList){
+		String adminId = ((SysAdmin)request.getSession().getAttribute("user")).getId();
+		//"402882355a5e4b28015a5e4b2d9f0000"
 		bean.setAdminId(adminId);
 		Orders save = orderService.save(bean, dList);
 		return save;

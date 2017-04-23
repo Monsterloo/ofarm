@@ -49,12 +49,14 @@ public class CategoryServiceImpl implements CategoryService {
 	public void saveAll(List<ZtreeNode> nodeList){
 		delAllCategory();
 		for(ZtreeNode node : nodeList){
-			Category c = categoryDao.findOne(node.getId());
-			if(c == null){
+			Category c = null;
+			if(node.getId() == null || "".equals(node.getId().trim())){
 				c = new Category();
+			} else{
+				c = categoryDao.findOne(node.getId());
 			}
 			c.setCname(node.getName());
-			c.setCname(node.getName());
+			c.setCid(node.getId());
 			c.setIsParent(node.getIsParent());
 			c.setParentid(node.getpId());
 			c.setState("1");

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.lulu.ofarm.net.entity.News;
 import com.lulu.ofarm.net.entity.Orders;
+import com.lulu.ofarm.net.entity.SysAdmin;
 import com.lulu.ofarm.net.service.NewsService;
 import com.lulu.ofarm.net.util.IOUtils;
 import com.lulu.ofarm.net.webmodel.NewsBean;
@@ -49,8 +50,8 @@ public class NewsController {
 	 * @return
 	 */
 	@RequestMapping("/insertNews")
-	public @ResponseBody News insertNews(HttpServletResponse response, News news){
-		String adminId = "402882355a5e4b28015a5e4b2d9f0000";
+	public @ResponseBody News insertNews(HttpServletRequest request, HttpServletResponse response, News news){
+		String adminId = ((SysAdmin)request.getSession().getAttribute("user")).getId();
 		news.setPublisher(adminId);
 		News obj = newsService.save(news);
 		return obj;

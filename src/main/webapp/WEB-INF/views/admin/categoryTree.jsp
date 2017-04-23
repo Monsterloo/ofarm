@@ -19,6 +19,8 @@
 		<link href="${ctx}/admin/css/style.css?v=4.1.0" rel="stylesheet">
 		<link rel="stylesheet" href="${ctx}/admin/css/plugins/zTree/demo.css" type="text/css" />
 		<link rel="stylesheet" href="${ctx}/admin/css/plugins/zTree/zTreeStyle/zTreeStyle.css" />
+		<!-- Sweet Alert -->
+    	<link href="${ctx}/admin/css/plugins/sweetalert/sweetalert.css" rel="stylesheet">
 		<!--添加按钮样式-->
 		<style type="text/css">
 			.ztree li span.button.add {
@@ -68,6 +70,9 @@
 		<!-- 全局js -->
 		<script src="${ctx}/admin/js/jquery.min.js?v=2.1.4"></script>
 		<script src="${ctx}/admin/js/bootstrap.min.js?v=3.3.6"></script>
+	
+		<!-- Sweet alert -->
+    	<script src="${ctx}/admin/js/plugins/sweetalert/sweetalert.min.js"></script>
 
 		<!-- 自定义js -->
 		<script type="text/javascript" src="${ctx}/admin/js/plugins/zTree/jquery.ztree.core.js"></script>
